@@ -2,8 +2,7 @@ from keras import backend as K
 # Accuracy ne prenant pas en compte les charactères complétés
 
 # Remove this when the cosineSimilarity will be added
-def cosineSimilarity(h1, h2):
-    return 2.3
+
 
 def ignore_class_accuracy(to_ignore=2):
     def ignore_accuracy(y_true, y_pred):
@@ -44,7 +43,7 @@ def get_data(filepath):
     outputs = []
     with open(filepath, 'r') as f:
         lines = f.readlines()
-    print(lines[:3])
+    #print(lines[:3])
 
 
     max_length = 0
@@ -66,26 +65,6 @@ def get_data(filepath):
         #print(line)
     return inputs, outputs, max_length
 
-def merging_checking(st1, st2, k):
-    similarity = False
-    consistency = False
-
-    # for the similarity, we will merge state1 to state 2 if
-    # If every input of state1 are in the input set of state2 and
-    # If for each input state1 input set, we get the same output
-    # from state1 and state2
-
-    if set(st1._outTr.keys()) in set(st2._outTr.keys()):
-        for char in list(st1._outTr.keys()):
-            if set(st1._outTr[char].keys()) == set(st1._outTr[char].keys()):
-                similarity = True
-
-    # compute the cosine similarity of the two hidden state value
-    # If it's greater than k, the consistency constraint in respected
-    if cosineSimilarity(st1.hidden_state, st2.hidden_state) > k:
-        consistency = True
-
-    return similarity and consistency
 
 def class_mapping(label, numb_class = 3):
     y_train = []
@@ -111,3 +90,28 @@ def tokenization(word, num_token = 3):
 
 def masking(word, pad_char = 'z'):
     return [x!=pad_char for x in word]
+
+
+def ignore_class_accuracy(to_ignore=2):
+    def ignore_accuracy(y_true, y_pred):
+        y_true_class = K.argmax(y_true, axis=-1)
+        y_pred_class = K.argmax(y_pred, axis=-1)
+ 
+        ignore_mask = K.cast(K.not_equal(y_pred_class, to_ignore), 'int32')
+        matches = K.cast(K.equal(y_true_class, y_pred_class), 'int32') * ignore_mask
+        accuracy = K.sum(matches) / K.maximum(K.sum(ignore_mask), 1)
+        return accuracy
+    return ignore_accuracy
+
+def cosine(h1, h2):
+    cos = 0
+    s1 = 0
+    s2 = 0
+    assert len(h1) == len(h2)
+    for i in range(len(h1)):
+        cos += h1[i]*h2[i]
+        s1 += h1[i]**2
+        s2 += h2[i]**2
+    s1 = s1**(1/2)
+    s2 = s2**(1/2)
+    return cos/(s1*s2)

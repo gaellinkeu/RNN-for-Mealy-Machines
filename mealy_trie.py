@@ -1,7 +1,10 @@
 from copy import deepcopy
-from utils import get_hidden_state, merging_checking
+
+
+#from utils import merging_checking
 
 class TrieTransition:
+    """A transition in the trie structure"""
 
     def __init__(self, src, tgt, input=None, output=None, id=-1):
         self.src = src
@@ -9,6 +12,15 @@ class TrieTransition:
         self._input = input
         self._output = output
         self._id = id
+
+    def getCharOutput(self):
+        return self._output
+    
+    def getStateOutput(self):
+        return self.tgt
+    
+    def serialize(self):
+        return (self.src, self._input, self._output, self.tgt)
 
 class TrieNode:
     """A node in the trie structure"""
@@ -21,9 +33,7 @@ class TrieNode:
         self.children = {}
         self.char = char
         self.label = label
-    
-    def map_hidden_state(self, hidden_state):
-        self.hidden_state = hidden_state
+  
     
     def addOutTr(self, transition:TrieTransition) :
       if not(transition.getInput() in self._outTr.keys()) :
@@ -56,11 +66,18 @@ class Trie(object):
         self.transitions = []
         self.inputVocabulary = []
         self.outputVocabulary = []
-        self.transitions = []
+        self.arcs = []
         self.states = {0: self.root} # The initial state is the state 0
+
+        # self.states = {0: node0, 1: node1, ...}
+        # self.transitions = {transition0, transition1, ...}
 
         for word, label in zip(corpus, labels):
             self.insert(word, label)
+
+        print(len(self.states))
+
+        self.dfs(self.root)
 
         #self.states = [[i, False] for i in range(self.count + 1)]
 
@@ -117,13 +134,13 @@ class Trie(object):
 
             node = new_node
 
-    # Store all trhe transition in our Tree
+    # Store all trie transition in our Tree
     def dfs(self, node):
         """Depth-first transversal of the trie"""
 
         for i in node.children.keys():
+            self.arcs.append((node.id, self.states[node.children[i][1]].char, self.states[node.children[i][1]].label, node.children[i][1]))
             self.dfs(self.states[node.children[i][1]])
-            self.transitions.append((node.id, self.states[node.children[i][1]].char, self.states[node.children[i][1]].label, node.children[i][1]))
 
     # Print the details of our Tree
     def print(self):
@@ -136,26 +153,15 @@ class Trie(object):
 
         print("Different states of the Tree: ")
         for i in list(self.states.keys()):
-            print(f'ID: {self.states[i].id}\tHidden value: {self.states[i].hidden_state}')
+            print(f'ID: {self.states[i].id}')
 
         print("\nDifferent transitions of the Tree: ")
         for transition in self.transitions:
             print(f'{transition.src.id} --> {transition._input}/{transition._output} --> {transition.tgt.id}')
 
-    def assign_state(self, corpus):
-        # Assignment of hidden values to respective states
-        for word in corpus:
-            node = self.root
-            hidden_states = get_hidden_state(word)
-            #self.states[0].hidden_state = hidden_states[0]
-            for i,char in enumerate(word):
-                node.hidden_state = hidden_states[i]
-                node = self.states[node.children[char][1]]
-                
-            print(f'h: {hidden_states}')
                 
     
-    def merging_state(self, k):
+    """def merging_state(self, k):
         # k is the similarity treshold
         for i in len(self.states.keys()):
             for j in len(self.states.keys()):
@@ -165,7 +171,7 @@ class Trie(object):
                 merge = merging_checking(self.states[i], self.states[j], k)  # check if the two states are mergable
 
                 if not merge:
-                    continue
+                    continue"""
 
     def return_states(self, word):
         node = self.root

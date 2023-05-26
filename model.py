@@ -23,8 +23,8 @@ class Tagger(tf.keras.Model):
     accuracy = tf.reduce_mean(tf.cast(bool_acc, tf.float32))
     #acc = ((predictions == labels) * mask).sum().float() / mask.sum()
     return {
-            "states": states,
-            "predictions": logits,
+            "states": states.numpy(),
+            "predictions": logits.numpy(),
             "accuracy": accuracy.numpy(),
             "loss": loss,
           }

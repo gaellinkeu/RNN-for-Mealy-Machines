@@ -1,10 +1,11 @@
-from model import Tagger 
-from utils import get_data, class_mapping, tokenization, masking
+from model2 import Tagger
+from utils import get_data, class_mapping, tokenization, masking, ignore_class_accuracy
 import os
 import numpy as np
 from tqdm import trange
 import tensorflow as tf
 from tensorflow import keras
+import pickle
 
 if __name__ == "__main__":
   
@@ -16,50 +17,36 @@ if __name__ == "__main__":
     labels_ = ["0"+x+"2"*(max_length - len(x)) for x in labels]
     states = []
 
-    n_epochs = 10
-    batch_size = 10
+    n_epochs = 5
+    
+    batch_size = 100
 
-    x_train = np.array([tokenization(x) for x in corpus_])
-    y_train = np.array([class_mapping(x) for x in labels_])
-    mask = np.array([masking(x) for x in corpus_])
+    x_train = np.array([tokenization(x) for x in corpus_[:100]])
+    y_train = np.array([class_mapping(x) for x in labels_[:100]])
+    mask = np.array([masking(x) for x in corpus_[:101]])
 
-    version_name = '01'
+    """version_name = '01'
     model_dir = os.path.join("weigths", version_name)
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
-    filepath = "weigths/model_weights.h5"
+    filepath = "weigths/model_weights.h5\""""
 
-    optimizer = keras.optimizers.Adam(learning_rate=0.01)
+    optimizer = keras.optimizers.Adam(learning_rate=0.001)
 
-    trained_model = Tagger(4, 10, max_length+1, 10)
-    """trained_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-    #trained_model.fit(x_train, y_train, epochs=n_epochs, batch_size=batch_size, validation_split=0.2, verbose=1)
+    model = Tagger(4, 10, 10, 3)
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy', ignore_class_accuracy(2)])
+
+    history = model.fit(x_train, y_train, batch_size, n_epochs)
+    # bacth de taille 2
     
-    train_results = trained_model(x_train, y_train, mask)"""
-
-    for epoch in range(5):
-        for batch_idx in trange(0, len(x_train) - 2, 2):
-            with tf.GradientTape() as tape:
-                batch_tokens = x_train[batch_idx:batch_idx + 2]
-                batch_labels = y_train[batch_idx:batch_idx + 2]
-                batch_mask = mask[batch_idx:batch_idx + 2]
-                train_results = trained_model(batch_tokens, batch_labels, batch_mask)
-                
-                loss = train_results['loss']
-            grads = tape.gradient(loss, trained_model.trainable_variables)
-            optimizer.apply_gradients(zip(grads, trained_model.trainable_variables))
-        #trained_model.save_weights(filepath)
-        train_results = trained_model(x_train, y_train, mask)
+    loss = history.history['loss'][-1]
+    accuracy = history.history['accuracy'][-1]
+    #print('\n\n\n Les prédictions sont: \n\n')
+    #print(train_preds)
     
-        train_preds = train_results["predictions"]
-        #print('\n\n\n Les prédictions sont: \n\n')
-        #print(train_preds)
-        
+    print(f'\n\n The loss: {loss}')
+    print(f'\n\n The accuracy: {accuracy}')
 
-        print(f'\n\n The accuracy: {train_results["accuracy"]}')
-
-    trained_model.save_weights("weigths")
-
-    representations = train_results["states"][:5]
-    print('\n\n\n Les étatss sont: \n\n')
-    print(representations)
+    filename = 'weights.txt'
+    with open(filename, 'wb') as f:
+        pickle.dump(model.get_weights(), f)
