@@ -72,23 +72,23 @@ class Trie(object):
         # self.states = {0: node0, 1: node1, ...}
         # self.transitions = {transition0, transition1, ...}
 
-        for word, label in zip(corpus, labels):
-            self.insert(word, label)
+        for i , (word, label) in enumerate(zip(corpus, labels)):
+            self.insert(word, label, i)
 
-        print(len(self.states))
+        print(f'\nThe number of states of the Trie: {len(self.states)}\n')
 
         self.dfs(self.root)
+        self.print()
 
         #self.states = [[i, False] for i in range(self.count + 1)]
 
         #self.dfs(self.root)
 
-    def insert(self, word, label):
+    def insert(self, word, label, i=0):
         """Insert a word into the trie"""
         
-
         node = self.root
-        
+    
         # Loop through each character in the word
         # Check if there is no child containing the character, create a new child for the current node
         for i, char in enumerate(word):
@@ -151,15 +151,22 @@ class Trie(object):
         print(f'Input vocabulary: {str(self.inputVocabulary)}')
         print(f'Output vocabulary: {str(self.outputVocabulary)}\n')
 
-        print("Different states of the Tree: ")
+        """print("Different states of the Tree: ")
         for i in list(self.states.keys()):
-            print(f'ID: {self.states[i].id}')
+            print(f'ID: {self.states[i].id}')"""
 
-        print("\nDifferent transitions of the Tree: ")
-        for transition in self.transitions:
-            print(f'{transition.src.id} --> {transition._input}/{transition._output} --> {transition.tgt.id}')
-
-                
+        print(f"\nFirst {len(self.transitions)} transitions of the Tree: ")
+        if len(self.transitions) <= 10:
+            print(f"\nFirst {len(self.transitions)} transitions of the Tree: ")
+            for transition in self.transitions:
+                print(f'-> {transition.src.id} --> {transition._input}/{transition._output} --> {transition.tgt.id}')
+        else:
+            for i, transition in enumerate(self.transitions):
+                print(f'-> {transition.src.id} --> {transition._input}/{transition._output} --> {transition.tgt.id}')
+                if i == 9:
+                    break
+        print("\n********************************************************************************\n\n")
+              
     
     """def merging_state(self, k):
         # k is the similarity treshold
@@ -177,8 +184,8 @@ class Trie(object):
         node = self.root
         trace = [node]
         for i,char in enumerate(word):
-                node = self.states[node.children[char][1]]
-                trace.append(node) 
+            node = self.states[node.children[char][1]]
+            trace.append(node) 
 
         return trace
     

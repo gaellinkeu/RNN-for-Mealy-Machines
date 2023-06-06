@@ -1,8 +1,8 @@
-# Initial author : Omer Nguena Timo
-# Modified by: Gael Linkeu
-
+# Original author : Omer Nguena Timo
+# Modified by: Gaël Linkeu
 from state import State
 from transition import Transition
+import os
 
 class FSM :
    def __init__(self, initState=None, data=None) :
@@ -74,8 +74,23 @@ class FSM :
          o = list(self._statesById[currentState.getID()]._outTr[i].keys())[0]
          currentState = self._statesById[currentState.getID()]._outTr[i][o][0]._tgt
          output += o
-      return output      
+      return output 
 
+   def save(self, id=0):
+      os.makedirs(f"./FSMs",exist_ok=True)
+      f1 = open(f"./FSMs/fsm{id}.txt", "w")
+      f1.write(f'{id}\n')
+
+      states = []
+      transitions = []
+      for i in self._statesById.keys():
+         states.append(self._statesById[i]._label)
+      for i in self._transitionsById.keys():
+         t = self._transitionsById[i]
+         transitions.append(f'({t._src._label}, {t._input}, {t._output}, {t._tgt._label})')
+
+      f1.write(f'{states}\n')
+      f1.write(f'{transitions}\n')
 
 
    

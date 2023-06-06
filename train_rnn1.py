@@ -1,5 +1,6 @@
+import argparse
 from model2 import Tagger
-from utils import get_data, class_mapping, tokenization, masking, ignore_class_accuracy
+from utils import *
 import os
 import numpy as np
 from tqdm import trange
@@ -7,23 +8,52 @@ import tensorflow as tf
 from tensorflow import keras
 import pickle
 
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--id", type=int, default=0)
+    parser.add_argument("--train_length", type=int, default=10)
+    parser.add_argument("--n_train_low", type=int, default=2)
+    parser.add_argument("--n_train_high", type=int, default=300)
+    parser.add_argument("--batch_size", type=int, default=10)
+    parser.add_argument("--n_epochs", type=int, default=20)
+    parser.add_argument("--hidden_size", type=float, default=10)
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
   
+    args = parse_args()
+
+    id = args.id
     #max_length = 4
     #corpus = ['ba', 'b', 'a', 'baa', 'a', 'baaa', 'aa', 'b', 'abaa', 'abb', 'bb']
     #labels = ['11', '1', '1', '110', '1', '1100', '10', '1', '1010', '101', '11']
-    corpus, labels, max_length = get_data('dataset2.txt')
-    corpus_ = ["e"+x+"z"*(max_length-len(x)) for x in corpus]
-    labels_ = ["0"+x+"2"*(max_length - len(x)) for x in labels]
-    states = []
+    corpus, labels = get_data(f'./datasets/dataset{id}.txt')
 
-    n_epochs = 5
+
+    max_length = len(max(corpus, key=len))
+
+    print(f'The corpus is {corpus[:5]}')
+    print(f'The labels are {labels[:5]}')
+
+    dev_size = int(0.2 * len(corpus))
+    dev_corpus = corpus[len(corpus) - dev_size:]
+    dev_labels = labels[len(corpus) - dev_size:]
+
+    corpus = corpus[:len(corpus) - dev_size]
+    labels = labels[:len(labels) - dev_size]
+    corpus_, labels_ = preprocessing(corpus, labels, max_length)
+
     
-    batch_size = 100
+    """corpus_ = ["e"+x+"z"*(max_length - len(x)) for x in corpus]
+    labels_ = ["0"+x+"2"*(max_length - len(x)) for x in labels]"""
+    states = []
+    print(f'\nThe length of corpus is: {len(corpus)}\n')
 
-    x_train = np.array([tokenization(x) for x in corpus_[:100]])
-    y_train = np.array([class_mapping(x) for x in labels_[:100]])
-    mask = np.array([masking(x) for x in corpus_[:101]])
+    x_train = np.array([tokenization(x) for x in corpus_])
+    y_train = np.array([class_mapping(x) for x in labels_])
+    mask = np.array([masking(x) for x in corpus_])
 
     """version_name = '01'
     model_dir = os.path.join("weigths", version_name)
@@ -36,7 +66,7 @@ if __name__ == "__main__":
     model = Tagger(4, 10, 10, 3)
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy', ignore_class_accuracy(2)])
 
-    history = model.fit(x_train, y_train, batch_size, n_epochs)
+    history = model.fit(x_train, y_train, args.batch_size, args.n_epochs)
     # bacth de taille 2
     
     loss = history.history['loss'][-1]
@@ -44,9 +74,10 @@ if __name__ == "__main__":
     #print('\n\n\n Les prédictions sont: \n\n')
     #print(train_preds)
     
-    print(f'\n\n The loss: {loss}')
-    print(f'\n\n The accuracy: {accuracy}')
+    print(f'\n\n The categorical crossentropy loss: {loss}')
+    print(f'\n\n The accuracy: {accuracy*100}')
 
-    filename = 'weights.txt'
+    os.makedirs(f"./weights",exist_ok=True)
+    filename = f'./weights/weights{id}.txt'
     with open(filename, 'wb') as f:
         pickle.dump(model.get_weights(), f)

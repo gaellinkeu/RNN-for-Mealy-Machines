@@ -1,4 +1,6 @@
 from keras import backend as K
+import sys, os
+from mealy_machine import *
 # Accuracy ne prenant pas en compte les charactères complétés
 
 # Remove this when the cosineSimilarity will be added
@@ -46,7 +48,7 @@ def get_data(filepath):
     #print(lines[:3])
 
 
-    max_length = 0
+    #max_length = 0
 
     for line in lines:
         res = ""
@@ -55,7 +57,7 @@ def get_data(filepath):
             if symbol in [',', '\n']:
                 if isInput:
                     inputs.append(res)
-                    max_length = len(res) if len(res) > max_length else max_length
+                    #max_length = len(res) if len(res) > max_length else max_length
                     res = ""
                     isInput = not isInput
                     continue
@@ -63,7 +65,29 @@ def get_data(filepath):
                     outputs.append(res)
             res += symbol
         #print(line)
-    return inputs, outputs, max_length
+    return inputs, outputs
+
+def preprocessing(corpus, labels, max_length):
+    
+    bos = ['e', 'f', 'g']  # Plausible beginning of sentence marker
+    for b in bos:
+        if b not in set(corpus):
+            break
+
+    eos = ['z', 'y', 'x'] # Plausible end of sentence marker
+    
+    for e in eos:
+        if e not in set(corpus):
+            break
+    pad_label = ['0', '1', '2', '3', '4']  
+
+    corpus_ = [b+x+e*(max_length-len(x)) for x in corpus]
+
+    for p in pad_label:
+        if p not in set(corpus):
+            break
+    labels_ = ['0'+x+p*(max_length-len(x)) for x in labels]
+    return corpus_, labels_
 
 
 def class_mapping(label, numb_class = 3):
@@ -103,6 +127,7 @@ def ignore_class_accuracy(to_ignore=2):
         return accuracy
     return ignore_accuracy
 
+# Compute the cosine similarity between two vectors
 def cosine(h1, h2):
     cos = 0
     s1 = 0
@@ -115,3 +140,80 @@ def cosine(h1, h2):
     s1 = s1**(1/2)
     s2 = s2**(1/2)
     return cos/(s1*s2)
+
+# Compute the eucledian distance between 
+def euclidian(h1, h2):
+    assert len(h1) == len(h2)
+    distance = 0
+    for i in range(len(h1)):
+        distance += (h1[i] - h2[i])**2
+    distance = distance**(1/2)
+    return distance
+
+# Check the equivalence between two fsm
+def fsm_equivalence(fsm1 : Mealy, fsm2 : Mealy):
+    if set(fsm1.inputAlphabet) != set(fsm2.inputAlphabet):
+        print('The two FSM don\'t have the same input set' )
+        return 0
+    if set(fsm1.outputAlphabet) != set(fsm2.outputAlphabet):
+        print('The two FSM don\'t have the same output set' )
+        return 0
+    start = (fsm1.root, fsm2.root)
+    inputAlphabet = set(fsm1.inputAlphabet + fsm2.inputAlphabet)
+    outputAlphabet = set(fsm1.outputAlphabet + fsm2.outputAlphabet)
+    nodes = [start]
+    nodes_ = deepcopy(nodes)
+    #print('Starting')
+    #print(nodes[0])
+    while len(nodes) != 0:
+        node = nodes[0]
+        for x in inputAlphabet:
+            output1 = fsm1.output(node[0], x)
+            output2 = fsm2.output(node[1], x)
+            #print(f'The len is {len(nodes)}')
+            #print(f'{node}   {x}   {(output1[1],output2[1])}')
+            if (output1 == None and output2!=None) or (output1 != None and output2==None):
+                return 0
+            if output1[0] != output2[0]:
+                return 0
+            
+            #print((output1[1], output2[1]))
+            node_ = (output1[1], output2[1])
+            if node_ not in nodes_:
+                nodes_.append(node_)
+                nodes.append(node_)
+        
+        nodes.pop(0)
+    return 1
+        
+def getFsm(filepath):
+    chars = [' ', '[', ']', ',', "'", '(', ')', '\n']
+    with open(filepath, 'r') as f:
+        lines = f.readlines()
+    id = int(lines[0][0])
+    states = list(lines[1])
+    states = list(filter(lambda x: x not in chars, states))
+
+    states = [int(x) for x in states]
+
+    arcs = list(lines[2])
+    #print(arcs)
+    arcs_ = list(filter(lambda x: x not in chars, arcs))
+    arcs = []
+    i = 0
+    while i < len(arcs_):
+        arc = (int(arcs_[i]), arcs_[i+1], arcs_[i+2], int(arcs_[i+3]))
+        
+        arcs.append(arc)
+        i = i+4
+    
+    fsm = Mealy(id, states[0], states, arcs)
+    return fsm
+
+# Block all the print calls
+def blockPrint():
+    sys.stdout = open(os.devnull, 'w')
+
+# Restore all the print calls
+def enablePrint():
+    sys.stdout = sys.__stdout__
