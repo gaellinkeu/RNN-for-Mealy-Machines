@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument("--train_length", type=int, default=10)
     parser.add_argument("--n_train_low", type=int, default=2)
     parser.add_argument("--n_train_high", type=int, default=300)
-    parser.add_argument("--sim_threshold", type=float, default=.75)
+    parser.add_argument("--sim_threshold", type=float, default=.85)
     parser.add_argument("--seeds", type=int, default=1)
     parser.add_argument("--hidden_size", type=float, default=10)
     parser.add_argument("--fst", dest='fst', action='store_true')
