@@ -3,7 +3,7 @@ from transition import Transition
 class State :
    def __init__(self, label=None, id = -1, accepting=False):
       self._label = label
-      self._id = -1
+      self._id = id
       self._accepting=accepting
       self._outTr = {}
       self._inTr = {}

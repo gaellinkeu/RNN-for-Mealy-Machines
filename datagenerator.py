@@ -79,7 +79,7 @@ def buildExampleFsm2() -> FSM :
 
 
 
-def fsmRandomGenInputComplete(nbStates =2,inputAlphabet =['a','b'], outputAlphabet =[0,1]) -> FSM :
+def fsmRandomGenInputComplete(nbStates=2,inputAlphabet =['a','b'], outputAlphabet =['0','1']) -> FSM :
     fsm = FSM()
     maxNbTransition = nbStates *  len(inputAlphabet)
     stateIds = [i for i in range(0,nbStates)]
@@ -96,9 +96,7 @@ def fsmRandomGenInputComplete(nbStates =2,inputAlphabet =['a','b'], outputAlphab
             #print(tr.toDot()) 
         fin = (fsm.nbTransitions()>=maxNbTransition)  
     print(f'The length: {len(fsm._statesById)}')
-    for i in fsm._statesById.keys():
-        #print(f's: {fsm.getState(state)}')
-        fsm._statesById[i].print()
+    print(fsm.toDot())
     return fsm  
     
 
@@ -142,7 +140,6 @@ if __name__ == '__main__' :
     # The first FSM
     inputs_set = []
     outputs_set = []
-    id = 0
 
     for _ in range(N):
         word = randomWord(min_length, max_length, fsm._inputSet)

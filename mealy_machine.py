@@ -1,4 +1,6 @@
+import os
 from copy import deepcopy
+
 class Mealy(object):
 
     def __init__(self, id, root, nodes, arcs):
@@ -20,7 +22,6 @@ class Mealy(object):
                 self.inputAlphabet.append(x[1])
             if x[2] not in self.outputAlphabet:
                 self.outputAlphabet.append(x[2])
-        print(f'\n\n ************************** Le char du state 0 sont {aplh}\n\n')
     
     def output(self, initial_state, input_char):
         for x in self.transitions:
@@ -70,8 +71,11 @@ class Mealy(object):
         #print("Different states of the Tree: ")
         #for i in self.nodes:
         #    print(f'ID: {i}\tHidden value: {0}')
+
         if all:
             num_transitions = len(self.transitions)
+        else:
+            num_transitions = 10
 
         print(f'-- The amount of Transitions is {len(self.transitions)}')
         print(f"\nFirst {num_transitions} over {len(self.transitions)} Transitions of the FSM")
@@ -193,5 +197,12 @@ class Mealy(object):
         if self.root == state2:
             self.root = state1
 
-
         return 0
+    
+    def save(self):
+        os.makedirs(f"./FSMs_extracted",exist_ok=True)
+        f1 = open(f"./FSMs_extracted/fsm{self.id}.txt", "w")
+
+        f1.write(f'{self.id}\n')
+        f1.write(f'{self.nodes}\n')
+        f1.write(f'{self.transitions}\n')

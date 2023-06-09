@@ -16,7 +16,7 @@ def parse_args():
     parser.add_argument("--n_train_low", type=int, default=2)
     parser.add_argument("--n_train_high", type=int, default=300)
     parser.add_argument("--batch_size", type=int, default=10)
-    parser.add_argument("--n_epochs", type=int, default=20)
+    parser.add_argument("--n_epochs", type=int, default=30)
     parser.add_argument("--hidden_size", type=float, default=10)
     return parser.parse_args()
 

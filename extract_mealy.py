@@ -1,5 +1,5 @@
 import argparse
-import time
+from datetime import date
 import sys
 from copy import deepcopy
 
@@ -146,103 +146,95 @@ if __name__ == "__main__" :
     expected_fsm = getFsm(fsm_filepath)
 
     data_filepath = f'./datasets/dataset{id}.txt'
-
-    for n in n_train:
         
-        corpus, labels = get_data(data_filepath)
-        corpus = corpus[:20]
-        labels = labels[:20]
+    corpus, labels = get_data(data_filepath)
+    assert(len(corpus) == len(labels))
+
+    split_index = 70
+    dev_corpus = corpus[split_index:]
+    dev_labels = labels[split_index:]
+
+    corpus = corpus[:split_index]
+    labels = labels[:split_index]
+
+    """corpus = [x[:4] for x in corpus]
+    labels = [x[:4] for x in labels]
+    corpus, labels = corpus[:20], labels[:20]"""
+
+    #corpus = ['ba', 'b', 'a', 'baa', 'a', 'baaa', 'aa', 'b', 'abaa', 'abb', 'bb', 'abb', 'aaaa', 'baaaaab', 'abababa']
+    #labels = ['11', '1', '1', '110', '1', '1100', '10', '1', '1010', '101', '11', '101', '1000', '1100000', '1010101']
     
-        """corpus = [x[:4] for x in corpus]
-        labels = [x[:4] for x in labels]
-        corpus, labels = corpus[:20], labels[:20]"""
+    max_length = len(max(corpus, key=len))
 
-        #corpus = ['ba', 'b', 'a', 'baa', 'a', 'baaa', 'aa', 'b', 'abaa', 'abb', 'bb', 'abb', 'aaaa', 'baaaaab', 'abababa']
-        #labels = ['11', '1', '1', '110', '1', '1100', '10', '1', '1010', '101', '11', '101', '1000', '1100000', '1010101']
-        assert(len(corpus) == len(labels))
-        max_length = len(max(corpus, key=len))
+    print(f'The corpus is {corpus[:5]}')
+    print(f'The labels are {labels[:5]}')
 
-        print(f'The corpus is {corpus[:5]}')
-        print(f'The labels are {labels[:5]}')
+    val_size = int(0.2 * len(corpus))
+    val_corpus = labels[len(corpus) - val_size:]
+    val_labels = labels[len(labels) - val_size:]
 
-        val_size = int(0.3 * len(corpus))
-        val_corpus = labels[len(corpus) - val_size:]
-        val_labels = labels[len(labels) - val_size:]
-
-        corpus = corpus[:len(corpus) - val_size]
-        labels = labels[:len(labels) - val_size]
-        
-
-
-        dev_size = int(0.2 * len(corpus))
-        dev_corpus = corpus[len(corpus) - dev_size:]
-        dev_labels = labels[len(labels) - dev_size:]
-
-        corpus = corpus[:len(corpus) - dev_size]
-        labels = labels[:len(labels) - dev_size]
-        corpus_, labels_ = preprocessing(corpus, labels, max_length)
-        #corpus_ = ["e"+x+"z"*(max_length-len(x)) for x in corpus]
-        #labels_ = ["0"+x+"2"*(max_length-len(x)) for x in labels]
-        labels__ = np.array([np.array(list(x)) for x in labels_])
-        mask = [x!="z" for x in corpus_]
-
-        
-        #print(corpus_)
-        #print(states)
-
-        x_train = np.array([tokenization(x) for x in corpus_])
-        train_sents = [tokenization(x) for x in corpus]
-        y_train = np.array([class_mapping(x) for x in labels_])
-        mask = np.array([masking(x) for x in corpus_])
-
-        print('\n\033[FData Preprocessing... Done\n')
-        trained_model = Tagger(4, 10, args.hidden_size, 3)
-        trained_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-        filename = f'./weights/weights{id}.txt'
-        with open(filename, 'rb') as f:
-            weights = pickle.load(f)
-        print('\033[FModel definition... Done\n')
-        trained_model.set_weights(weights)
-        print('\033[FModel Update... Done\n')
-        #load_weights(trained_model, 'weights.txt')
+    corpus = corpus[:len(corpus) - val_size]
+    labels = labels[:len(labels) - val_size]
     
-        redundant_fsm = build_fsm_from_dict(n, corpus, labels)
-        #redundant_fsm.print()
-        print('\033[FTrie Building... Done\n')
-        assert(score_all_prefixes(redundant_fsm, corpus, labels) == 100.0)
-        print('\033[FChecking if the trie get the right ouput for each input... Done\n')
-        trained_model.pop()
-        
-        representations = trained_model.predict(x_train)
-        print('\033[FGetting states... Done\n')
-        idx = [redundant_fsm.return_states(sent) for sent in corpus] # maps strings to states
-        n_states = len(redundant_fsm.nodes)
-        states = np.zeros((n_states, args.hidden_size))
-        states_mask = np.zeros(n_states)
-        print('\033[FStates Mapping preparation... Done\n')
-        
-        #print(idx)
+    corpus_, labels_ = preprocessing(corpus, labels, max_length)
+    
+    labels__ = np.array([np.array(list(x)) for x in labels_])
+    mask = [x!="z" for x in corpus_]
 
-        for i, _r in enumerate(representations):
-            states[idx[i]] = _r[mask[i]]
-            states_mask[idx[i]] = labels__[i][mask[i]]
-        #print(states)
-        #print(states[0])
-        #print(states[1])
-        print('\033[FStates Mapping... Done\n')
-        init_fsm = deepcopy(redundant_fsm)
-        find_threshold = False
-        print('\033[FMerging Preparation... Done\n')
+    x_train = np.array([tokenization(x) for x in corpus_])
+    train_sents = [tokenization(x) for x in corpus]
+    y_train = np.array([class_mapping(x) for x in labels_])
+    mask = np.array([masking(x) for x in corpus_])
 
-        if(find_threshold):
-            # code for finding the good similarity threshold
-            print("We are findinf the optimal threshold")
-            merged_fsm, _, _ = cross_validate(.5, 1., redundant_fsm, states, states_mask, val_corpus, val_labels)
-            args.find_threshold = True
-        else:
-            merged_fsm = cosine_merging(redundant_fsm, states, states_mask, threshold=args.sim_threshold, symmetric=args.symmetric_merging)
-        print('\033[FMerging stage... Done\n')
-        merged_fsm.print(all=True)
+    print('\n\033[FData Preprocessing... Done\n')
+    trained_model = Tagger(4, 10, args.hidden_size, 3)
+    trained_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    filename = f'./weights/weights{id}.txt'
+    with open(filename, 'rb') as f:
+        weights = pickle.load(f)
+    print('\033[FModel definition... Done\n')
+    trained_model.set_weights(weights)
+    print('\033[FModel Update... Done\n')
+    #load_weights(trained_model, 'weights.txt')
+
+    redundant_fsm = build_fsm_from_dict(id, corpus, labels)
+    #redundant_fsm.print()
+    print('\033[FTrie Building... Done\n')
+    assert(score_all_prefixes(redundant_fsm, corpus, labels) == 100.0)
+    print('\033[FChecking if the trie get the right ouput for each input... Done\n')
+    trained_model.pop()
+    
+    representations = trained_model.predict(x_train)
+    print('\033[FGetting states... Done\n')
+    idx = [redundant_fsm.return_states(sent) for sent in corpus] # maps strings to states
+    n_states = len(redundant_fsm.nodes)
+    states = np.zeros((n_states, args.hidden_size))
+    states_mask = np.zeros(n_states)
+    print('\033[FStates Mapping preparation... Done\n')
+    
+    #print(idx)
+
+    for i, _r in enumerate(representations):
+        states[idx[i]] = _r[mask[i]]
+        states_mask[idx[i]] = labels__[i][mask[i]]
+    #print(states)
+    #print(states[0])
+    #print(states[1])
+    print('\033[FStates Mapping... Done\n')
+    init_fsm = deepcopy(redundant_fsm)
+    find_threshold = False
+    print('\033[FMerging Preparation... Done\n')
+
+    if(find_threshold):
+        # code for finding the good similarity threshold
+        print("We are findinf the optimal threshold")
+        merged_fsm, _, _ = cross_validate(.5, 1., redundant_fsm, states, states_mask, val_corpus, val_labels)
+        args.find_threshold = True
+    else:
+        merged_fsm = cosine_merging(redundant_fsm, states, states_mask, threshold=args.sim_threshold, symmetric=args.symmetric_merging)
+    print('\033[FMerging stage... Done\n')
+    merged_fsm.save()
+    merged_fsm.print(all=True)
     
     # Checking the equivalence between the get
     equivalence = fsm_equivalence(expected_fsm, merged_fsm)
@@ -252,10 +244,15 @@ if __name__ == "__main__" :
     else:
         print('\n\nThe obtained FSM is NOT EQUIVALENT to the expected FSM\n')
     
-    _acc = score_whole_words(merged_fsm, dev_corpus, dev_labels)
+    dev_accuracy = score_whole_words(merged_fsm, dev_corpus, dev_labels)
     #_acc = 0
     print('\033[FGetting the accuracy... Done\n')
-    train_acc["0"].append(_acc)
+    train_acc["0"].append(dev_accuracy)
     
     print('\n****************  WE HAVE FINISHED   ***************')
-    print(f'\n*************   THE ACCURACY IS :   {_acc}   *****************')
+    print(f'\n*************   THE ACCURACY IS :   {dev_accuracy}   *****************')
+
+    day = date.today()
+    os.makedirs(f"./Logs",exist_ok=True)
+    f1 = open(f"./Logs/{day}.txt", "w")
+    f1.write(f'{id} | {len(dev_corpus)} words | {dev_accuracy}\n')

@@ -51,6 +51,33 @@ class FSM :
    def nbTransitions(self):
       return len(self._transitionsById.keys())
    
+   def min_words(self, remaining_states, current_state):
+      stop = False
+      if len(remaining_states) == 0:
+         stop = True
+      state = current_state
+      inputs_set = []
+      outputs_set = []
+      alphabet = 0
+      transitions = list(self._transitionsById.values())
+      for x in transitions:
+         if x._src._id == state:
+            alphabet += 1
+            if stop:
+               inputs_set.append(x._input)
+               outputs_set.append(x._output)
+            else:
+               input_char = x._input
+               output_char = x._output
+               if x._tgt._id in remaining_states:
+                  input_words, output_words = self.min_words(x._tgt._id, remaining_states.remove(x._tgt._id))
+                  inputs_set.append([input_char+p for p in input_words])
+                  outputs_set.append([output_char+p for p in output_words])
+
+            if alphabet > len(self._inputSet):
+               print(f'The state {state} has more output transitions than the alphabet lenght')
+      return inputs_set, outputs_set
+   
    def __str__(self) -> str:
       pass
   
@@ -66,6 +93,7 @@ class FSM :
       return rst  
    
    def produceOutput(self, input) -> str:
+
       currentState = self._initial
       output = ""
       # i for input_symbol
