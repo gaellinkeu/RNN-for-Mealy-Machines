@@ -155,12 +155,13 @@ class Trie(object):
         for i in list(self.states.keys()):
             print(f'ID: {self.states[i].id}')"""
 
-        print(f"\nFirst {len(self.transitions)} transitions of the Tree: ")
+        
         if len(self.transitions) <= 10:
             print(f"\nFirst {len(self.transitions)} transitions of the Tree: ")
             for transition in self.transitions:
                 print(f'-> {transition.src.id} --> {transition._input}/{transition._output} --> {transition.tgt.id}')
         else:
+            print(f"\nFirst 10 over {len(self.transitions)} transitions of the Tree: ")
             for i, transition in enumerate(self.transitions):
                 print(f'-> {transition.src.id} --> {transition._input}/{transition._output} --> {transition.tgt.id}')
                 if i == 9:

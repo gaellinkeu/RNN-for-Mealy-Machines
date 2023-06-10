@@ -15,9 +15,10 @@ def parse_args():
     parser.add_argument("--train_length", type=int, default=10)
     parser.add_argument("--n_train_low", type=int, default=2)
     parser.add_argument("--n_train_high", type=int, default=300)
+    parser.add_argument("--dev_percentage", type=float, default=0.2)
     parser.add_argument("--batch_size", type=int, default=10)
     parser.add_argument("--n_epochs", type=int, default=30)
-    parser.add_argument("--hidden_size", type=float, default=10)
+    parser.add_argument("--hidden_size", type=int, default=10)
     return parser.parse_args()
 
 
@@ -26,6 +27,8 @@ if __name__ == "__main__":
     args = parse_args()
 
     id = args.id
+
+    print('\n\n\n'+'*'*20+f' ID {id}: '+' TRAINING THE RECURRENT NEURAL NETWORK '+'*'*20+'\n\n\n')
     #max_length = 4
     #corpus = ['ba', 'b', 'a', 'baa', 'a', 'baaa', 'aa', 'b', 'abaa', 'abb', 'bb']
     #labels = ['11', '1', '1', '110', '1', '1100', '10', '1', '1010', '101', '11']
@@ -37,7 +40,7 @@ if __name__ == "__main__":
     print(f'The corpus is {corpus[:5]}')
     print(f'The labels are {labels[:5]}')
 
-    dev_size = int(0.2 * len(corpus))
+    dev_size = int(args.dev_percentage * len(corpus))
     dev_corpus = corpus[len(corpus) - dev_size:]
     dev_labels = labels[len(corpus) - dev_size:]
 
@@ -64,7 +67,7 @@ if __name__ == "__main__":
     optimizer = keras.optimizers.Adam(learning_rate=0.001)
 
     model = Tagger(4, 10, 10, 3)
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy', ignore_class_accuracy(2)])
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
     history = model.fit(x_train, y_train, args.batch_size, args.n_epochs)
     # bacth de taille 2

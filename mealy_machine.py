@@ -8,7 +8,7 @@ class Mealy(object):
         # arcs = [(0,a,1,1), ...]
         self.id = id
         self.root =  root
-        self.nodes = nodes
+        self.states = nodes
         self.transitions = [list(x) for x in arcs]
         self.inputAlphabet = []
         self.outputAlphabet = []
@@ -65,38 +65,35 @@ class Mealy(object):
     
     
     
-    def print(self, num_transitions = 10, all=False):
+    def print(self, print_all=False):
+        print("\n********************* The extracted Mealy Machine *********************\n")
         print(f'-- The initial state is {self.root}')
-        print(f'-- The amount of states is {len(self.nodes)}')
+        print(f'-- The amount of states is {len(self.states)}')
         #print("Different states of the Tree: ")
-        #for i in self.nodes:
+        #for i in self.states:
         #    print(f'ID: {i}\tHidden value: {0}')
-
-        if all:
+        num_transitions = 10
+        if print_all:
             num_transitions = len(self.transitions)
-        else:
-            num_transitions = 10
+            
 
         print(f'-- The amount of Transitions is {len(self.transitions)}')
         print(f"\nFirst {num_transitions} over {len(self.transitions)} Transitions of the FSM")
-        if len(self.transitions) <= num_transitions :
-            for transition in self.transitions:
-                print(f'-> {transition[0]} --> {transition[1]}/{transition[2]} --> {transition[3]}')
-        else:
-            for i, transition in enumerate(self.transitions):
-                print(f'-> {transition[0]} --> {transition[1]}/{transition[2]} --> {transition[3]}')
-                if i == 9:
-                    break
+        for i, transition in enumerate(self.transitions):
+            print(f'-> {transition[0]} --> {transition[1]}/{transition[2]} --> {transition[3]}')
+            if i==(num_transitions-1):
+                break
+                
 
         
     def removeDuplicate(self):
         add = True
         states = []
-        for x in self.nodes:
+        for x in self.states:
             if x not in states:
                 states.append(x)
         
-        self.nodes = deepcopy(states)
+        self.states = deepcopy(states)
 
         transitions = [self.transitions[0]]
         for x in self.transitions:
@@ -115,7 +112,7 @@ class Mealy(object):
             if x[3] not in nodes:
                 nodes.append(x[3])
 
-        self.nodes = deepcopy(nodes)
+        self.states = deepcopy(nodes)
         
     def merge_states(self, state1, state2):
         
@@ -125,17 +122,18 @@ class Mealy(object):
         
         self.removeDuplicate()
         #self.print()
+        return k
 
 
     def merging(self, state1, state2, real_merging = True):
-
+        
        
         if ((state1, state2) not in self.states_to_merge) and ((state2, state1) not in self.states_to_merge):
             self.states_to_merge.append((state1, state2))
         else:
             return 0
         
-        if state1 not in self.nodes or state2 not in self.nodes:
+        if state1 not in self.states or state2 not in self.states:
             return 0
         if real_merging:
             pass
@@ -146,10 +144,10 @@ class Mealy(object):
         submerge = []
         if state1 == state2:
             return 0
-        if (state1 not in self.nodes or state2 not in self.nodes):
-            return 1
+        if (state1 not in self.states or state2 not in self.states):
+            return 0
         
-        
+           
 
         non_determinism = False
         for i in range(len(self.transitions)):
@@ -163,6 +161,8 @@ class Mealy(object):
         if non_determinism:
             return 0
 
+        res = 1
+
         for i in range(len(self.transitions)):
             for j in range(len(self.transitions)):
                 if(i == j):
@@ -175,7 +175,7 @@ class Mealy(object):
                             submerge.append((self.transitions[i][3], self.transitions[j][3]))
                         else: 
                             #print(f'\n The two SUB states are {self.transitions[i][3]} and {self.transitions[j][3]}\n')
-                            self.merging(self.transitions[i][3], self.transitions[j][3], False)
+                            res += self.merging(self.transitions[i][3], self.transitions[j][3], False)
                     
 
         
@@ -197,12 +197,12 @@ class Mealy(object):
         if self.root == state2:
             self.root = state1
 
-        return 0
+        return res
     
     def save(self):
         os.makedirs(f"./FSMs_extracted",exist_ok=True)
         f1 = open(f"./FSMs_extracted/fsm{self.id}.txt", "w")
 
         f1.write(f'{self.id}\n')
-        f1.write(f'{self.nodes}\n')
+        f1.write(f'{self.states}\n')
         f1.write(f'{self.transitions}\n')

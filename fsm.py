@@ -104,6 +104,15 @@ class FSM :
          output += o
       return output 
 
+   def print(self):
+      print(f'-- The initial state is {self._initial._id}')
+      print(f'-- The amount of states is {len(self._statesById)}')
+      print(f'-- The amount of Transitions is {len(self._transitionsById)}')
+      
+      transitions = list(self._transitionsById.values())
+      for x in transitions:
+         print(f'-> {x._src._id} --> {x._input}/{x._output} --> {x._tgt._id}')
+
    def save(self, id=0):
       os.makedirs(f"./FSMs",exist_ok=True)
       f1 = open(f"./FSMs/fsm{id}.txt", "w")

@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument("--train_length", type=int, default=10)
     parser.add_argument("--n_train_low", type=int, default=2)
     parser.add_argument("--n_train_high", type=int, default=300)
-    parser.add_argument("--sim_threshold", type=float, default=.85)
+    parser.add_argument("--sim_threshold", type=float, default=.9)
     parser.add_argument("--seeds", type=int, default=1)
     parser.add_argument("--hidden_size", type=float, default=10)
     parser.add_argument("--fst", dest='fst', action='store_true')
@@ -78,7 +78,7 @@ def cosine_merging(fsm, states, states_mask, threshold, symmetric=False):
     fsm_ = deepcopy(fsm)
     #print(tf.shape(sim.shape))
     #print(sim)
-    fsm_.print(all = True)
+    #fsm_.print()
     sim1 = []
     for i in range(len(states)):
         sim1.append([])
@@ -104,15 +104,14 @@ def cosine_merging(fsm, states, states_mask, threshold, symmetric=False):
             if(sim1[i][j] >= threshold):
                 #print('*****************************')
                 #print(f'The states to merge {i} and {j}')
-                total += 1
                 
-                res = fsm_.merge_states(j, i)
+                total += fsm_.merge_states(j, i)
                 #print(f'The number of states : {len(fsm_.nodes)}')
                 
                 #pruned += 1 - res
     #enablePrint()
     print(f'\nLe total des fusion est: {total}\n')
-    fsm_.print()
+    #fsm_.print()
     fsm_.removeDuplicate()
     fsm_.id = str(fsm_.id) + 'min'
     return fsm_
@@ -135,8 +134,9 @@ def cross_validate(left, right, fsm, states, states_mask, val_sents, val_gold, s
 
 if __name__ == "__main__" :
     args = parse_args()
+    id = args.id
 
-    print('\n\n\n'+'*'*20+' EXTRACTION OF MEALY MACHINE FROM RNN '+'*'*20+'\n\n\n')
+    print('\n\n\n'+'*'*20+f' ID {id}: '+' EXTRACTION OF MEALY MACHINE FROM RNN '+'*'*20+'\n\n\n')
 
     init_train_acc, init_dev_acc, train_acc, dev_acc = {}, {}, {}, {}
     train_acc["0"] = []
@@ -150,7 +150,7 @@ if __name__ == "__main__" :
     corpus, labels = get_data(data_filepath)
     assert(len(corpus) == len(labels))
 
-    split_index = 70
+    split_index = 100
     dev_corpus = corpus[split_index:]
     dev_labels = labels[split_index:]
 
@@ -166,8 +166,9 @@ if __name__ == "__main__" :
     
     max_length = len(max(corpus, key=len))
 
-    print(f'The corpus is {corpus[:5]}')
-    print(f'The labels are {labels[:5]}')
+    print('Some words of our dataset')
+    print(f'Corpus: {corpus[:5]}')
+    print(f'Labels: {labels[:5]}')
 
     val_size = int(0.2 * len(corpus))
     val_corpus = labels[len(corpus) - val_size:]
@@ -186,30 +187,41 @@ if __name__ == "__main__" :
     y_train = np.array([class_mapping(x) for x in labels_])
     mask = np.array([masking(x) for x in corpus_])
 
-    print('\n\033[FData Preprocessing... Done\n')
+    print("\n\033[FData Preprocessing... Done\n")
+
     trained_model = Tagger(4, 10, args.hidden_size, 3)
     trained_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
     filename = f'./weights/weights{id}.txt'
     with open(filename, 'rb') as f:
         weights = pickle.load(f)
+
     print('\033[FModel definition... Done\n')
+
     trained_model.set_weights(weights)
+
     print('\033[FModel Update... Done\n')
+
     #load_weights(trained_model, 'weights.txt')
 
     redundant_fsm = build_fsm_from_dict(id, corpus, labels)
     #redundant_fsm.print()
+
     print('\033[FTrie Building... Done\n')
+
     assert(score_all_prefixes(redundant_fsm, corpus, labels) == 100.0)
+
     print('\033[FChecking if the trie get the right ouput for each input... Done\n')
+
     trained_model.pop()
-    
     representations = trained_model.predict(x_train)
+
     print('\033[FGetting states... Done\n')
+
     idx = [redundant_fsm.return_states(sent) for sent in corpus] # maps strings to states
-    n_states = len(redundant_fsm.nodes)
+    n_states = len(redundant_fsm.states)
     states = np.zeros((n_states, args.hidden_size))
     states_mask = np.zeros(n_states)
+
     print('\033[FStates Mapping preparation... Done\n')
     
     #print(idx)
@@ -227,14 +239,14 @@ if __name__ == "__main__" :
 
     if(find_threshold):
         # code for finding the good similarity threshold
-        print("We are findinf the optimal threshold")
+        print("We are findind the optimal threshold")
         merged_fsm, _, _ = cross_validate(.5, 1., redundant_fsm, states, states_mask, val_corpus, val_labels)
         args.find_threshold = True
     else:
         merged_fsm = cosine_merging(redundant_fsm, states, states_mask, threshold=args.sim_threshold, symmetric=args.symmetric_merging)
     print('\033[FMerging stage... Done\n')
     merged_fsm.save()
-    merged_fsm.print(all=True)
+    merged_fsm.print(print_all=True)
     
     # Checking the equivalence between the get
     equivalence = fsm_equivalence(expected_fsm, merged_fsm)
@@ -254,5 +266,5 @@ if __name__ == "__main__" :
 
     day = date.today()
     os.makedirs(f"./Logs",exist_ok=True)
-    f1 = open(f"./Logs/{day}.txt", "w")
+    f1 = open(f"./Logs/{day}.txt", "a")
     f1.write(f'{id} | {len(dev_corpus)} words | {dev_accuracy}\n')

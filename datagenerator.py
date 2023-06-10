@@ -33,10 +33,10 @@ def buildExampleFsm0() -> FSM :
    for transition in transitions:
       fsm.addTransition(transition[0], transition[1], transition[2], transition[3])
 
-   for i in fsm._statesById.keys():
+   #for i in fsm._statesById.keys():
         #print(f's: {fsm.getState(state)}')
-        fsm._statesById[i].print()
-        pass
+        #fsm._statesById[i].print()
+        #pass
 
    return fsm
 
@@ -49,9 +49,9 @@ def buildExampleFsm1() -> FSM :
    for transition in transitions:
       fsm.addTransition(transition[0], transition[1], transition[2], transition[3])
 
-   for i in fsm._statesById.keys():
+   """for i in fsm._statesById.keys():
         #print(f's: {fsm.getState(state)}')
-        fsm._statesById[i].print()
+        fsm._statesById[i].print()"""
 
    return fsm
 
@@ -71,9 +71,9 @@ def buildExampleFsm2() -> FSM :
    for transition in transitions:
        fsm.addTransition(transition[0], transition[1], transition[2], transition[3])
 
-   for i in fsm._statesById.keys():
+   """for i in fsm._statesById.keys():
         #print(f's: {fsm.getState(state)}')
-        fsm._statesById[i].print()
+        fsm._statesById[i].print()"""
 
    return fsm
 
@@ -95,8 +95,8 @@ def fsmRandomGenInputComplete(nbStates=2,inputAlphabet =['a','b'], outputAlphabe
             tr = fsm.addTransition(idSrcState,idTgtState,input,output)
             #print(tr.toDot()) 
         fin = (fsm.nbTransitions()>=maxNbTransition)  
-    print(f'The length: {len(fsm._statesById)}')
-    print(fsm.toDot())
+    #print(f'The length: {len(fsm._statesById)}')
+    #print(fsm.toDot())
     return fsm  
     
 
@@ -119,6 +119,7 @@ if __name__ == '__main__' :
     args = parse_args()
 
     id = args.id
+    print('\n\n\n'+'*'*20+f' ID {id}: '+' RANDOM FSM INITIALIZING AND DATA GENERATION '+'*'*20+'\n\n\n')
 
     N = args.train_length
     max_length = args.n_train_high
@@ -147,6 +148,7 @@ if __name__ == '__main__' :
         outputs_set.append(fsm.produceOutput(word))
         #print(f"{word} => {fsm.produceOutput(word)}\n")
     datasetSaving(id, inputs_set, outputs_set)
+    fsm.print()
     fsm.save(id)
 
     """
