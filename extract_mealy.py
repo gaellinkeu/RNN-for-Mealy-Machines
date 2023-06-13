@@ -28,7 +28,7 @@ def parse_args():
     parser.add_argument("--find_threshold", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("--seeds", type=int, default=1)
     parser.add_argument("--hidden_size", type=float, default=10)
-    parser.add_argument('--eval', type=str, default="labels")
+    parser.add_argument('--eval', type=str, default="preds")
     parser.add_argument("--new_runtime", type=int, default=0)
     return parser.parse_args()
 
