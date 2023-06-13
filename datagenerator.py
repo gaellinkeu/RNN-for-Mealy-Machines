@@ -106,8 +106,8 @@ def parse_args():
     parser.add_argument("--id", type=int, default=-1)
     parser.add_argument("--train_length", type=int, default=1000)
     parser.add_argument("--n_train_low", type=int, default=1)
-    parser.add_argument("--n_train_high", type=int, default=12)
-    parser.add_argument("--n_states", type=int, default=5)
+    parser.add_argument("--n_train_high", type=int, default=15)
+    parser.add_argument("--n_states", type=int, default=2)
     return parser.parse_args()
 
 
@@ -126,14 +126,8 @@ if __name__ == '__main__' :
     min_length = args.n_train_low
     n_states = args.n_states
     
-    if id == 0:
-        fsm = buildExampleFsm0()
-    elif id == 1:
-        fsm = buildExampleFsm1()
-    elif id == 2:
-        fsm = buildExampleFsm2()
-    else:
-        fsm = fsmRandomGenInputComplete(n_states)
+    
+    fsm = fsmRandomGenInputComplete(n_states)
 
     
     #print(F.produceOutput('abbaba'))

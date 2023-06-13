@@ -127,6 +127,25 @@ def ignore_class_accuracy(to_ignore=2):
         return accuracy
     return ignore_accuracy
 
+def list_to_string(list_, mask):
+    string = ''
+    for i, x in enumerate(list_):
+        if i == 0:
+            continue
+        if mask[i]:
+            string += f'{x}'
+    return string
+
+def nparray_to_string(predictions, mask):
+    preds = predictions.tolist()
+    labels = []
+    for i, x in enumerate(preds):
+        labels.append(list_to_string(x, mask[i]))
+
+    return labels
+
+
+
 # Compute the cosine similarity between two vectors
 def cosine(h1, h2):
     cos = 0

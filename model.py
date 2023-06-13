@@ -1,32 +1,35 @@
-import tensorflow as tf
+from tensorflow import keras
+from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 from keras.layers import SimpleRNN
 from keras.layers import Embedding
-from keras.losses import CategoricalCrossentropy
+import json
+import numpy as np
 
-class Tagger(tf.keras.Model):
+def Tagger(n_tokens = 4, embedding_vector_length = 10, hidden_dim = 10, n_labels = 3, return_states = False):
+    model = Sequential()
+    model.add(Embedding(n_tokens, embedding_vector_length))
+    model.add(SimpleRNN(hidden_dim, return_sequences=True))
+    if not return_states:
+        model.add(Dense(n_labels, activation='softmax'))
+    return model
 
-  def __init__(self, n_tokens = 3, embed_dim = 10, max_length = 99, rnn_dim = 10, n_labels=3):
-    super().__init__()
-    self.embedding = Embedding(n_tokens, embed_dim, input_length=max_length, mask_zero=True)
-    self.rnn = SimpleRNN(rnn_dim, return_sequences=True)
-    self.outputs = Dense(n_labels, activation='softmax')
+# These two functions work only for the specified configuration of the network
+"""def save_weights(model, filename):
+    weights = []
+    for layer in model.layers:
+        w = []
+        [w.append(x.tolist()) for x in layer.get_weights()]
+        weights.append(w)
+    
+    with open(filename, 'w') as f:
+        json.dump(weights, f)"""
 
-  def call(self, token_ids, labels, mask, training = True):
-    embeddings = self.embedding(token_ids)
-    states = self.rnn(embeddings)
-    logits = self.outputs(states)
-    loss = CategoricalCrossentropy()(labels, logits)
-    #predictions = tf.math.argmax(logits, axis=-1)
-    bool_acc = tf.equal(tf.argmax(logits, -1), tf.argmax(labels, -1))
-    accuracy = tf.reduce_mean(tf.cast(bool_acc, tf.float32))
-    #acc = ((predictions == labels) * mask).sum().float() / mask.sum()
-    return {
-            "states": states.numpy(),
-            "predictions": logits.numpy(),
-            "accuracy": accuracy.numpy(),
-            "loss": loss,
-          }
-
-
+def load_weights(model, filename):
+    with open(filename, 'r') as f:
+        weights = json.load(f)
+    
+    """model.layers[0].set_weights([np.array(weights[0][0])])
+    model.layers[1].set_weights([np.array(weights[1][0]), np.array(weights[1][1]), np.array(weights[1][2])])
+    model.layers[2].set_weights([np.array(weights[2][0]), np.array(weights[2][1])])"""
