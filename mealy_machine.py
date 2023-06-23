@@ -168,23 +168,14 @@ class Mealy(object):
                 if(i == j):
                     continue
 
-                # merge the children of the two mergable states
                 if self.transitions[i][0] == state1 and self.transitions[j][0] == state2:
                     if self.transitions[i][1:3] == self.transitions[j][1:3]:
                         if self.transitions[i][3] in (state1, state2) and self.transitions[j][3] in (state1, state2):
-                            submerge.append((self.transitions[i][3], self.transitions[j][3]))
-                        else: 
+                           pass
+                        else:
                             #print(f'\n The two SUB states are {self.transitions[i][3]} and {self.transitions[j][3]}\n')
                             res += self.merging(self.transitions[i][3], self.transitions[j][3], False)
-                    
 
-        
-        for x in submerge:
-            for i in range(len(self.transitions)):
-                if self.transitions[i][0] == x[1]:
-                    self.transitions[i][0] = x[0]
-                if self.transitions[i][3] == x[1]:
-                    self.transitions[i][3] = x[0]
 
         
         for i in range(len(self.transitions)):
