@@ -1,0 +1,8 @@
+
+The batch size is 10
+The amount of epoch is 50
+The training dataset is size 800
+The testing dataset size is 200
+The training accuracy is 100.0 %
+
+The testing accuracy: 100.00%

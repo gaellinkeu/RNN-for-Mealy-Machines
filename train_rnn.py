@@ -80,10 +80,22 @@ if __name__ == "__main__":
     #print(train_preds)
     
     print(f'\n The training categorical crossentropy loss: {loss}')
-    print(f'\n The training accuracy: {accuracy*100}')
+    print(f'\n The training accuracy: {accuracy*100} %')
 
     scores = model.evaluate(x_test, y_test, verbose=0)
     print("\n The testing accuracy: %.2f%%" % (scores[1]*100))
+
+    os.makedirs(f"./Infos",exist_ok=True)
+    info_filepath = f'./Infos/Execution {id}.txt'
+    f1 = open(info_filepath, "a")
+    f1.write(f'The ID: {id}')
+    f1.write(f'\nConcerning RNN: {id}')
+    f1.write(f'\nThe batch size: {args.batch_size}')
+    f1.write(f'\nThe amount of epoch: {args.n_epochs}')
+    f1.write(f'\nThe training dataset size: {x_train.shape[0]}')
+    f1.write(f'\nThe testing dataset size: {x_test.shape[0]}')
+    f1.write(f'\nThe training accuracy: {accuracy*100} %\n')
+    f1.write("The testing accuracy: %.2f%%" % (scores[1]*100))
 
     os.makedirs(f"./weights",exist_ok=True)
     filename = f'./weights/weights{id}.txt'

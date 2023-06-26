@@ -1,0 +1,5 @@
+The ID: 2
+Concerning Final FSM: 2
+The similarity threshold: 0.95
+The amount of all merging: 410
+The amount of correct merging: 408

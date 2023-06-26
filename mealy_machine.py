@@ -114,41 +114,38 @@ class Mealy(object):
 
         self.states = deepcopy(nodes)
         
-    def merge_states(self, state1, state2):
+    def merge_states(self, state1, state2, similarity_matrix):
         
-        
-        k = self.merging(state1, state2)
+        all_merge, correct_merge = 0, 0
 
-        
+        all_merge, correct_merge = self.merging(state1, state2, similarity_matrix)
         self.removeDuplicate()
         #self.print()
-        return k
+        return all_merge, correct_merge
 
 
-    def merging(self, state1, state2, real_merging = True):
+    def merging(self, state1, state2, similarity_matrix, real_merging = True):
         
-       
+        x, y = 0, 0
         if ((state1, state2) not in self.states_to_merge) and ((state2, state1) not in self.states_to_merge):
             self.states_to_merge.append((state1, state2))
         else:
-            return 0
+            return 0, 0
         
         if state1 not in self.states or state2 not in self.states:
-            return 0
+            return 0, 0
         if real_merging:
             pass
             #print(f'\nThe real merging of two states {state1} and {state2}')
         else:
             pass
             #print(f'The submerging of two states {state1} and {state2}')
-        submerge = []
+       
         if state1 == state2:
-            return 0
+            return 0, 0
         if (state1 not in self.states or state2 not in self.states):
-            return 0
+            return 0, 0
         
-           
-
         non_determinism = False
         for i in range(len(self.transitions)):
             for j in range(len(self.transitions)):
@@ -159,9 +156,13 @@ class Mealy(object):
                         non_determinism = True
 
         if non_determinism:
-            return 0
-
+            return 0, 0
+        
+        correct_sub = 0
         res = 1
+        
+        if similarity_matrix[state1][state2]:
+            correct_sub += 1
 
         for i in range(len(self.transitions)):
             for j in range(len(self.transitions)):
@@ -174,10 +175,11 @@ class Mealy(object):
                            pass
                         else:
                             #print(f'\n The two SUB states are {self.transitions[i][3]} and {self.transitions[j][3]}\n')
-                            res += self.merging(self.transitions[i][3], self.transitions[j][3], False)
+                            
+                            x, y = self.merging(self.transitions[i][3], self.transitions[j][3], similarity_matrix, False)
+                            res += x
+                            correct_sub += y
 
-
-        
         for i in range(len(self.transitions)):
             if self.transitions[i][0] == state2:
                 self.transitions[i][0] = state1
@@ -188,7 +190,7 @@ class Mealy(object):
         if self.root == state2:
             self.root = state1
 
-        return res
+        return res, correct_sub
     
     def save(self):
         os.makedirs(f"./FSMs_extracted",exist_ok=True)
