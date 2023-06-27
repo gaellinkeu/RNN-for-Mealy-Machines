@@ -1,5 +1,5 @@
-The ID: 1
-Concerning RNN: 1
+The ID: 4
+Concerning RNN: 4
 The batch size: 10
 The amount of epoch: 25
 The training dataset size: 8000
@@ -7,10 +7,10 @@ The testing dataset size: 2000
 The training accuracy: 100.0 %
 The testing accuracy: 100.00%
 
-The ID: 1
+The ID: 4
 Concerning Final FSM
 The similarity threshold: 0.95
-The amount of all merging: 332
-The amount of correct merging: 332
+The amount of all merging: 422
+The amount of correct merging: 422
 The size of te dev set: 10000
 The max length of a dev word: 300

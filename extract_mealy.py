@@ -21,9 +21,9 @@ import pickle
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--id", type=int, default=0)
-    parser.add_argument("--train_length", type=int, default=10)
-    parser.add_argument("--n_train_low", type=int, default=2)
-    parser.add_argument("--n_train_high", type=int, default=300)
+    parser.add_argument("--dev_length", type=int, default=10000)
+    parser.add_argument("--n_dev_low", type=int, default=1)
+    parser.add_argument("--n_dev_high", type=int, default=300)
     parser.add_argument("--sim_threshold", type=float, default=.95)
     parser.add_argument("--find_threshold", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("--seeds", type=int, default=1)
@@ -37,6 +37,7 @@ def score_whole_words(mealy, dataset, labels):
     acc = 0
     for word, y in zip(dataset, labels):
         acc += (mealy.return_output(word) == y)
+    print(f'\nThe amount of uncorrect labels: {len(dataset) - acc}')
     return (acc / len(dataset) * 100)
 
 def score_all_prefixes(mealy, dataset, labels):
@@ -145,6 +146,16 @@ if __name__ == "__main__" :
     fsm_filepath = f'./FSMs/fsm{id}.txt'
     expected_fsm = getFsm(fsm_filepath)
 
+    dev_corpus = []
+    dev_labels = []
+    for _ in range(args.dev_length):
+        word = randomWord(args.n_dev_low, args.n_dev_high, expected_fsm.inputAlphabet)
+        dev_corpus.append(word)
+        dev_labels.append(expected_fsm.return_output(word))
+
+    max_length_dev = len(max(dev_corpus, key=len))
+
+
     data_filepath = f'./datasets/dataset{id}.txt'
         
     corpus, labels = get_data(data_filepath)
@@ -161,14 +172,14 @@ if __name__ == "__main__" :
     
     
 
-    print('Some words of our dataset')
+    print('***** Some words of our dataset *****\n')
     print(f'Corpus: {corpus[:5]}')
     print(f'Labels: {labels[:5]}')
 
     split_index = 100
-    dev_corpus = corpus[split_index:]
+    """dev_corpus = corpus[split_index:]
     dev_labels = labels[split_index:]
-    max_length_dev = len(max(dev_corpus, key=len))
+    max_length_dev = len(max(dev_corpus, key=len))"""
 
     corpus = corpus[:split_index]
     labels = labels[:split_index]
@@ -286,6 +297,8 @@ if __name__ == "__main__" :
     f1.write(f'\nThe similarity threshold: {args.sim_threshold}')
     f1.write(f'\nThe amount of all merging: {all_merge}')
     f1.write(f'\nThe amount of correct merging: {correct_merge}')
+    f1.write(f'\nThe size of te dev set: {len(dev_corpus)}')
+    f1.write(f'\nThe max length of a dev word: {args.n_dev_high}')
 
 
     day = date.today()

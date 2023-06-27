@@ -7,13 +7,8 @@ import random
 from fsm import FSM
 from state import State
 import argparse
+from utils import randomWord
 
-def randomWord(min_length, max_length, vocab) -> str:
-    word = ""
-    length = random.randrange(min_length, max_length)
-    for i in range(length):
-        word += random.choice(list(vocab))
-    return word
 
 def datasetSaving(id, inputs, outputs):
     assert len(inputs) == len(outputs), 'The inputs set and output sets don\'t have the same length'
@@ -104,7 +99,7 @@ def fsmRandomGenInputComplete(nbStates=2,inputAlphabet =['a','b'], outputAlphabe
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--id", type=int, default=-1)
-    parser.add_argument("--train_length", type=int, default=1000)
+    parser.add_argument("--train_length", type=int, default=10000)
     parser.add_argument("--n_train_low", type=int, default=1)
     parser.add_argument("--n_train_high", type=int, default=15)
     parser.add_argument("--n_states", type=int, default=2)

@@ -1,9 +1,17 @@
 from keras import backend as K
 import sys, os
 from mealy_machine import *
+import random
 # Accuracy ne prenant pas en compte les charactères complétés
 
 # Remove this when the cosineSimilarity will be added
+
+def randomWord(min_length, max_length, vocab) -> str:
+    word = ""
+    length = random.randrange(min_length, max_length)
+    for i in range(length):
+        word += random.choice(list(vocab))
+    return word
 
 
 def ignore_class_accuracy(to_ignore=2):

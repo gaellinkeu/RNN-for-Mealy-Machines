@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument("--n_train_high", type=int, default=300)
     parser.add_argument("--test_size", type=float, default=0.2)
     parser.add_argument("--batch_size", type=int, default=10)
-    parser.add_argument("--n_epochs", type=int, default=50)
+    parser.add_argument("--n_epochs", type=int, default=25)
     parser.add_argument("--hidden_size", type=int, default=100)
     return parser.parse_args()
 
@@ -28,6 +28,12 @@ if __name__ == "__main__":
     args = parse_args()
 
     id = args.id
+    n_epochs = args.n_epochs
+
+    if id > 2:
+        n_epochs *= 2
+    if id > 5:
+        n_epochs *= 2 
 
     print('\n\n\n'+'*'*20+f' ID {id}: '+' TRAINING THE RECURRENT NEURAL NETWORK '+'*'*20+'\n\n\n')
     #max_length = 4
@@ -71,7 +77,7 @@ if __name__ == "__main__":
     model = Tagger(4, 10, 10, 3)
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-    history = model.fit(x_train, y_train, args.batch_size, args.n_epochs)
+    history = model.fit(x_train, y_train, args.batch_size, n_epochs)
     # bacth de taille 2
     
     loss = history.history['loss'][-1]

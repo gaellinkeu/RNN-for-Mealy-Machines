@@ -160,9 +160,16 @@ class Mealy(object):
         
         correct_sub = 0
         res = 1
+
+        if state1 > state2:
+            if similarity_matrix[state1][state2]:
+                correct_sub += 1
+        else:
+            if similarity_matrix[state2][state1]:
+                correct_sub += 1
         
-        if similarity_matrix[state1][state2]:
-            correct_sub += 1
+        
+        
 
         for i in range(len(self.transitions)):
             for j in range(len(self.transitions)):
