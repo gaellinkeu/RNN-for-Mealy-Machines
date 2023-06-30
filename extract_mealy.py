@@ -66,7 +66,7 @@ def build_fsm_from_dict(id, dict, labels, nfa=False):
 
 def cosine_merging(fsm, states, threshold):
      
-    all_merge, correct_merge = 0, 0
+    all_merges, correct_merges = 0, 0
     fsm_ = deepcopy(fsm)
     #print(tf.shape(sim.shape))
     #print(sim)
@@ -104,18 +104,18 @@ def cosine_merging(fsm, states, threshold):
                 #print(f'The states to merge {i} and {j}')
                 
                 x, y = fsm_.merge_states(j, i, similarity_bool)
-                all_merge += x
-                correct_merge += y
+                all_merges += x
+                correct_merges += y
                 #print(f'The number of states : {len(fsm_.nodes)}')
                 
                 #pruned += 1 - res
     #enablePrint()
-    print(f'\nThe total amount of merging is: {all_merge}\n')
-    print(f'\nThe total amount of correct merging is: {correct_merge}\n')
+    print(f'\nThe total amount of merging is: {all_merges}\n')
+    print(f'\nThe total amount of correct merging is: {correct_merges}\n')
     #fsm_.print()
     fsm_.removeDuplicate()
     fsm_.id = str(fsm_.id) + 'min'
-    return fsm_, all_merge, correct_merge
+    return fsm_, all_merges, correct_merges
 
 def cross_validate(left, right, fsm, states, states_mask, val_sents, val_gold, symmetric=False):
 
@@ -123,19 +123,20 @@ def cross_validate(left, right, fsm, states, states_mask, val_sents, val_gold, s
 
     for j in np.arange(left, right, .05):
         _fsm = deepcopy(fsm)
-        merged_fsm, all_merge, correct_merge = cosine_merging(_fsm, states, states_mask, j, symmetric=False)
+        merged_fsm, all_merges, correct_merges = cosine_merging(_fsm, states, states_mask, j, symmetric=False)
         cur_acc = score_all_prefixes(merged_fsm, val_sents, val_gold)
         if (cur_acc > max_acc):
             max_acc = cur_acc
             opt_threshold = j
             opt_fsm = deepcopy(merged_fsm)
 
-    return opt_fsm, all_merge, correct_merge, opt_threshold, max_acc
+    return opt_fsm, all_merges, correct_merges, opt_threshold, max_acc
 
 
 if __name__ == "__main__" :
     args = parse_args()
     id = args.id
+    sim_threshold = args.sim_threshold
 
     print('\n\n\n'+'*'*20+f' ID {id}: '+' EXTRACTION OF MEALY MACHINE FROM RNN '+'*'*20+'\n\n\n')
 
@@ -145,7 +146,7 @@ if __name__ == "__main__" :
     
     fsm_filepath = f'./FSMs/fsm{id}.txt'
     expected_fsm = getFsm(fsm_filepath)
-
+    
     dev_corpus = []
     dev_labels = []
     for _ in range(args.dev_length):
@@ -161,15 +162,7 @@ if __name__ == "__main__" :
     corpus, labels = get_data(data_filepath)
     assert(len(corpus) == len(labels))
 
-    
 
-    """corpus = [x[:4] for x in corpus]
-    labels = [x[:4] for x in labels]
-    corpus, labels = corpus[:20], labels[:20]"""
-
-    #corpus = ['ba', 'b', 'a', 'baa', 'a', 'baaa', 'aa', 'b', 'abaa', 'abb', 'bb', 'abb', 'aaaa', 'baaaaab', 'abababa']
-    #labels = ['11', '1', '1', '110', '1', '1100', '10', '1', '1010', '101', '11', '101', '1000', '1100000', '1010101']
-    
     
 
     print('***** Some words of our dataset *****\n')
@@ -263,12 +256,12 @@ if __name__ == "__main__" :
 
     if(args.find_threshold):
         # code for finding the good similarity threshold
-        print("We are findind the optimal threshold")
-        merged_fsm, all_merge, correct_merge, _, _ = cross_validate(.5, 1., redundant_fsm, states, states_mask, val_corpus, val_labels)
+        print("We are finding the optimal threshold")
+        merged_fsm, all_merges, correct_merges, sim_threshold, _ = cross_validate(.5, 1., redundant_fsm, states, states_mask, val_corpus, val_labels)
         
     else:
-        print(f'We used the threshold : {args.sim_threshold}')
-        merged_fsm, all_merge, correct_merge = cosine_merging(redundant_fsm, states, threshold=args.sim_threshold)
+        print(f'We used the threshold : {sim_threshold}')
+        merged_fsm, all_merges, correct_merges = cosine_merging(redundant_fsm, states, threshold=sim_threshold)
     print('\--> Merging stage... Done\n')
     merged_fsm.save()
     merged_fsm.print(print_all=True)
@@ -295,11 +288,11 @@ if __name__ == "__main__" :
     f1.write(f'\n\nThe ID: {id}')
     f1.write(f'\nConcerning Final FSM')
     f1.write(f'\nThe similarity threshold: {args.sim_threshold}')
-    f1.write(f'\nThe amount of all merging: {all_merge}')
-    f1.write(f'\nThe amount of correct merging: {correct_merge}')
+    f1.write(f'\nThe amount of all merging: {all_merges}')
+    f1.write(f'\nThe amount of correct merging: {correct_merges}')
     f1.write(f'\nThe size of te dev set: {len(dev_corpus)}')
     f1.write(f'\nThe max length of a dev word: {args.n_dev_high}')
-
+    f1.close()
 
     day = date.today()
     os.makedirs(f"./Logs",exist_ok=True)
@@ -313,3 +306,9 @@ if __name__ == "__main__" :
 
     f1 = open(checkout_path, "a")
     f1.write(f'{id} | {len(dev_corpus)} words | {dev_accuracy}\n')
+    f1.close()
+
+    results_filepath = f'./results.txt'
+    f1 = open(results_filepath, "a")
+    f1.write(f'{len(dev_corpus)},{len(corpus)},{sim_threshold},{all_merges},{correct_merges},{equivalence},{dev_accuracy}')
+    

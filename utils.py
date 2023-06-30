@@ -214,25 +214,69 @@ def fsm_equivalence(fsm1 : Mealy, fsm2 : Mealy):
     return 1
         
 def getFsm(filepath):
-    chars = [' ', '[', ']', ',', "'", '(', ')', '\n']
+    removed_chars = [' ', "'", '\n']
+    removed_chars2 = [' ', '[', ']', "'", '\n']
     with open(filepath, 'r') as f:
         lines = f.readlines()
     id = int(lines[0][0])
-    states = list(lines[1])
-    states = list(filter(lambda x: x not in chars, states))
+    states_ = list(lines[1])
+    states_ = list(filter(lambda x: x not in removed_chars, states_))
+    
+    states = []
+    word = ''
+    start = True
+    for x in states_:
+        if x == '[':
+            start = True
+            continue
+        if x == ']':
+            states.append(int(word))
+            start=False
+        if start:
+            if x==',':
+                states.append(int(word))
+                word=''
+            else:
+                word += x
+
+
 
     states = [int(x) for x in states]
 
     arcs = list(lines[2])
     #print(arcs)
-    arcs_ = list(filter(lambda x: x not in chars, arcs))
+    arcs_ = list(filter(lambda x: x not in removed_chars2, arcs))
     arcs = []
+    arc = []
     i = 0
-    while i < len(arcs_):
-        arc = (int(arcs_[i]), arcs_[i+1], arcs_[i+2], int(arcs_[i+3]))
+    start=False
+    word = ''
+    for x in arcs_:
+        if x=='(':
+            start=True
+            continue
+        if x==')':
+            arc.append(word)
+            word=''
+            arcs.append((int(arc[0]),arc[1],arc[2],int(arc[3])))
+            arc= []
+            start=False
+            continue
         
+        if start:
+            if x==',':
+                arc.append(word)
+                word=''
+            else:
+                word += x
+
+
+    """while i < len(arcs_):
+        
+        arc = (int(arcs_[i]), arcs_[i+1], arcs_[i+2], int(arcs_[i+3]))
+        print(arc)
         arcs.append(arc)
-        i = i+4
+        i = i+4"""
     
     fsm = Mealy(id, states[0], states, arcs)
     return fsm

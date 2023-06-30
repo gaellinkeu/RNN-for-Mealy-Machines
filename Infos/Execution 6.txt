@@ -1,55 +1,17 @@
 The ID: 6
 Concerning RNN: 6
 The batch size: 10
-The amount of epoch: 50
-The training dataset size: 800
-The testing dataset size: 200
-The training accuracy: 94.0416693687439 %
-The testing accuracy: 93.63%
-
-The ID: 6
-Concerning Final FSM
-The similarity threshold: 0.95
-The amount of all merging: 318
-The amount of correct merging: 292
-The size of te dev set: 10000
-The max length of a dev word: 300The ID: 6
-Concerning RNN: 6
-The batch size: 10
-The amount of epoch: 50
-The training dataset size: 800
-The testing dataset size: 200
-The training accuracy: 97.25000262260437 %
-The testing accuracy: 96.80%
-
-The ID: 6
-Concerning Final FSM
-The similarity threshold: 0.95
-The amount of all merging: 288
-The amount of correct merging: 255
-The size of te dev set: 10000
-The max length of a dev word: 300
-
-The ID: 6
-Concerning Final FSM
-The similarity threshold: 0.9
-The amount of all merging: 293
-The amount of correct merging: 254
-The size of te dev set: 10000
-The max length of a dev word: 300The ID: 6
-Concerning RNN: 6
-The batch size: 10
-The amount of epoch: 50
-The training dataset size: 800
-The testing dataset size: 200
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
 The training accuracy: 100.0 %
 The testing accuracy: 100.00%
 
 The ID: 6
 Concerning Final FSM
-The similarity threshold: 0.9
-The amount of all merging: 283
-The amount of correct merging: 281
+The similarity threshold: 0.95
+The amount of all merging: 366
+The amount of correct merging: 362
 The size of te dev set: 10000
 The max length of a dev word: 300The ID: 6
 Concerning RNN: 6
@@ -63,7 +25,67 @@ The testing accuracy: 100.00%
 The ID: 6
 Concerning Final FSM
 The similarity threshold: 0.95
-The amount of all merging: 366
-The amount of correct merging: 362
+The amount of all merging: 495
+The amount of correct merging: 495
+The size of te dev set: 10000
+The max length of a dev word: 300The ID: 6
+Concerning RNN: 6
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 100.0 %
+The testing accuracy: 100.00%
+
+The ID: 6
+Concerning Final FSM
+The similarity threshold: 0.95
+The amount of all merging: 306
+The amount of correct merging: 286
+The size of te dev set: 10000
+The max length of a dev word: 300The ID: 6
+Concerning RNN: 6
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 100.0 %
+The testing accuracy: 100.00%
+
+The ID: 6
+Concerning Final FSM
+The similarity threshold: 0.95
+The amount of all merging: 253
+The amount of correct merging: 248
+The size of te dev set: 10000
+The max length of a dev word: 300The ID: 6
+Concerning RNN: 6
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 99.97583627700806 %
+The testing accuracy: 100.00%
+
+The ID: 6
+Concerning Final FSM
+The similarity threshold: 0.95
+The amount of all merging: 292
+The amount of correct merging: 292
+The size of te dev set: 10000
+The max length of a dev word: 300The ID: 6
+Concerning RNN: 6
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 100.0 %
+The testing accuracy: 100.00%
+
+The ID: 6
+Concerning Final FSM
+The similarity threshold: 0.95
+The amount of all merging: 305
+The amount of correct merging: 305
 The size of te dev set: 10000
 The max length of a dev word: 300

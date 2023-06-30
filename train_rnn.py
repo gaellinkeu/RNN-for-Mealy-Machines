@@ -79,9 +79,23 @@ if __name__ == "__main__":
 
     history = model.fit(x_train, y_train, args.batch_size, n_epochs)
     # bacth de taille 2
+
+    # Saving weights
+    os.makedirs(f"./weights",exist_ok=True)
+    filename = f'./weights/weights{id}.txt'
+    with open(filename, 'wb') as f:
+        pickle.dump(model.get_weights(), f)
     
     loss = history.history['loss'][-1]
     accuracy = history.history['accuracy'][-1]
+
+    # get the epoch where we achieved 100 accuracy
+    epoch_convergence = 0
+    for i in range(len(history.history['accuracy'])):
+        if int(history.history['accuracy'][i]*100) == 100:
+            epoch_convergence = i+1
+            break
+        
     #print('\n\n\n Les prédictions sont: \n\n')
     #print(train_preds)
     
@@ -102,8 +116,10 @@ if __name__ == "__main__":
     f1.write(f'\nThe testing dataset size: {x_test.shape[0]}')
     f1.write(f'\nThe training accuracy: {accuracy*100} %\n')
     f1.write("The testing accuracy: %.2f%%" % (scores[1]*100))
+    f1.close()
 
-    os.makedirs(f"./weights",exist_ok=True)
-    filename = f'./weights/weights{id}.txt'
-    with open(filename, 'wb') as f:
-        pickle.dump(model.get_weights(), f)
+
+    results_filepath = f'./results.txt'
+    f1 = open(results_filepath, "a")
+    f1.write(f'\n{id},{x_train.shape[0]},{x_test.shape[0]},{epoch_convergence},{accuracy*100},{scores[1]*100}')
+    
