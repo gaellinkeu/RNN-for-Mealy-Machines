@@ -119,7 +119,7 @@ if __name__ == "__main__":
     f1.close()
 
 
-    results_filepath = f'./results.txt'
+    results_filepath = f'./static_results.txt'
     f1 = open(results_filepath, "a")
     f1.write(f'\n{id},{x_train.shape[0]},{x_test.shape[0]},{epoch_convergence},{accuracy*100},{scores[1]*100}')
     

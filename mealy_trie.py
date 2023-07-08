@@ -184,12 +184,20 @@ class Trie(object):
     def return_states(self, word):
         node = self.root
         trace = [node]
-        for i,char in enumerate(word):
+        for char in word:
             node = self.states[node.children[char][1]]
             trace.append(node) 
 
         return trace
     
+    def produceOutput(self, input):
+        node = self.root
+        output = []
+        for char in input:
+            output.append(self.states[node.children[char][0]])
+            node = self.states[node.children[char][1]]
+        return output
+            
                 
 
 

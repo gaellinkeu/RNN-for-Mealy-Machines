@@ -43,8 +43,7 @@ def score_whole_words(mealy, dataset, labels):
 def score_all_prefixes(mealy, dataset, labels):
     # A bunch of code on how to determine if a label correctly corresponds
     # to the output of the mealy machine
-    scores = 0
-    total = 0
+    score , count = 0, 0
     for i in range(len(dataset)):
         b = f'{i+1} / {len(dataset)}'
         # \r prints a carriage return first, so `b` is printed on top of the previous line.
@@ -52,11 +51,16 @@ def score_all_prefixes(mealy, dataset, labels):
         #sys.stdout.write('\r'+b)
         #time.sleep(0.5)
         output = mealy.return_output(dataset[i])
-        score = [labels[i][j] == output[j] for j in range(len(output))]
-        scores += score.count(True)
-        total += len(output)
+        
+        scores = [labels[i][j] == output[j] for j in range(len(output))]
+        for x in scores:
+            if x == False:
+                break
+            score += 1
+            
+        count += len(dataset[i])
 
-    return scores/total * 100
+    return score/count * 100
 
 def build_fsm_from_dict(id, dict, labels, nfa=False):
     t = Trie(dict, labels)
@@ -140,8 +144,6 @@ if __name__ == "__main__" :
 
     print('\n\n\n'+'*'*20+f' ID {id}: '+' EXTRACTION OF MEALY MACHINE FROM RNN '+'*'*20+'\n\n\n')
 
-    init_train_acc, init_dev_acc, train_acc, dev_acc = {}, {}, {}, {}
-    train_acc["0"] = []
     n_train = range(1)
     
     fsm_filepath = f'./FSMs/fsm{id}.txt'
@@ -208,11 +210,8 @@ if __name__ == "__main__" :
     predictions = trained_model.predict(x_train)
     predictions = predictions.argmax(axis=-1)
     pred_labels = nparray_to_string(predictions, mask)
-    print(pred_labels[:5])
-    print(labels[:5])
     
-    print('\--> Trie Building... Done\n')
-
+    
     if args.eval == 'preds' :
         redundant_fsm = build_fsm_from_dict(id, corpus, pred_labels)
         #assert(score_all_prefixes(redundant_fsm, corpus, labels) == 100.0), '\nPredictions are not the same with labels'
@@ -221,9 +220,11 @@ if __name__ == "__main__" :
         #assert(score_all_prefixes(redundant_fsm, corpus, pred_labels) == 100.0), '\nLabels are not the same with predictions'
     #redundant_fsm.print()
 
- 
+    print('\--> Trie Building... Done\n')
 
-    
+    init_dev_accuracy = score_all_prefixes(redundant_fsm, corpus, labels)
+    print(init_dev_accuracy)
+    exit()
 
     print('\--> Checking if the trie get the right ouput for each input... Done\n')
 
@@ -310,7 +311,8 @@ if __name__ == "__main__" :
     f1.write(f'{id} | {len(dev_corpus)} words | {dev_accuracy}\n')
     f1.close()
 
-    results_filepath = f'./results.txt'
+    results_filepath = f'./static_results_extract.txt'
     f1 = open(results_filepath, "a")
-    f1.write(f',{len(dev_corpus)},{len(corpus)},{sim_threshold},{all_merges},{correct_merges},{len(expected_fsm.states)},{len(merged_fsm.states)},{equivalence},{dev_accuracy}')
+    f1.write(f'{id},{sim_threshold},{len(expected_fsm.states)},{len(merged_fsm.states)},{equivalence},{init_dev_accuracy},{dev_accuracy}')
+    #f1.write(f',{len(dev_corpus)},{len(corpus)},{sim_threshold},{all_merges},{correct_merges},{len(expected_fsm.states)},{len(merged_fsm.states)},{equivalence},{dev_accuracy}')
     

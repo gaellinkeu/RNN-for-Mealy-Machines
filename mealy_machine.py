@@ -44,7 +44,7 @@ class Mealy(object):
         idx = self.root
         for i in range(len(word)):
            if self.output(idx, word[i]) == None:
-            print(f'There\'s no transitions from {idx} with {word[i]}')
+            #print(f'There\'s no transitions from {idx} with {word[i]}')
             break
            output += self.output(idx, word[i])[0]
            idx = self.output(idx, word[i])[1]
@@ -58,7 +58,7 @@ class Mealy(object):
         idx = [self.root]
         for i in range(len(word)):
            if self.output(idx[i], word[i]) == None:
-            print(f'There\'s no transitions from {idx[i]} with {word[i]}')
+            #print(f'There\'s no transitions from {idx[i]} with {word[i]}')
             break
            idx.append(self.output(idx[i], word[i])[1])
         return idx
