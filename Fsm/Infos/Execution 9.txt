@@ -1,0 +1,44 @@
+The ID: 9
+Concerning RNN: 9
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 100.0 %
+The testing accuracy: 100.00%The ID: 9
+Concerning RNN: 9
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 99.16916489601135 %
+The testing accuracy: 99.02%The ID: 9
+Concerning RNN: 9
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 99.98499751091003 %
+The testing accuracy: 99.98%The ID: 9
+Concerning RNN: 9
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 100.0 %
+The testing accuracy: 100.00%The ID: 9
+Concerning RNN: 9
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 100.0 %
+The testing accuracy: 100.00%
+
+The ID: 9
+Concerning Final FSM
+The similarity threshold: 0.95
+The amount of all merging: 349
+The amount of correct merging: 349
+The size of te dev set: 10000
+The max length of a dev word: 300

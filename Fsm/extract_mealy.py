@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument("--dev_length", type=int, default=10000)
     parser.add_argument("--n_dev_low", type=int, default=1)
     parser.add_argument("--n_dev_high", type=int, default=300)
-    parser.add_argument("--sim_threshold", type=float, default=.95)
+    parser.add_argument("--sim_threshold", type=float, default=.9)
     parser.add_argument("--find_threshold", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("--seeds", type=int, default=1)
     parser.add_argument("--hidden_size", type=float, default=10)
