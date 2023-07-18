@@ -20,6 +20,7 @@ def parse_args():
     parser.add_argument("--batch_size", type=int, default=10)
     parser.add_argument("--n_epochs", type=int, default=25)
     parser.add_argument("--hidden_size", type=int, default=100)
+    parser.add_argument("--times", type=int, default=0)
     return parser.parse_args()
 
 
@@ -35,11 +36,11 @@ if __name__ == "__main__":
     if id > 5:
         n_epochs *= 2 
 
-    print('\n\n\n'+'*'*20+f' ID {id}: '+' TRAINING THE RECURRENT NEURAL NETWORK '+'*'*20+'\n\n\n')
+    print('\n\n\n'+'*'*20+f' ID {id} TIMES {args.times}: '+' TRAINING THE RECURRENT NEURAL NETWORK '+'*'*20+'\n\n\n')
     #max_length = 4
     #corpus = ['ba', 'b', 'a', 'baa', 'a', 'baaa', 'aa', 'b', 'abaa', 'abb', 'bb']
     #labels = ['11', '1', '1', '110', '1', '1100', '10', '1', '1010', '101', '11']
-    corpus, labels = get_data(f'./datasets/dataset{id}.txt')
+    corpus, labels = get_data(f'./datasets/dataset{id}_{args.times}.txt')
 
 
     max_length = len(max(corpus, key=len))
@@ -82,7 +83,7 @@ if __name__ == "__main__":
 
     # Saving weights
     os.makedirs(f"./weights",exist_ok=True)
-    filename = f'./weights/weights{id}.txt'
+    filename = f'./weights/weights{id}_{args.times}.txt'
     with open(filename, 'wb') as f:
         pickle.dump(model.get_weights(), f)
     
@@ -105,21 +106,15 @@ if __name__ == "__main__":
     scores = model.evaluate(x_test, y_test, verbose=0)
     print("\n The testing accuracy: %.2f%%" % (scores[1]*100))
 
-    os.makedirs(f"./Infos",exist_ok=True)
-    info_filepath = f'./Infos/Execution {id}.txt'
-    f1 = open(info_filepath, "a")
-    f1.write(f'The ID: {id}')
-    f1.write(f'\nConcerning RNN: {id}')
-    f1.write(f'\nThe batch size: {args.batch_size}')
-    f1.write(f'\nThe amount of epoch: {args.n_epochs}')
-    f1.write(f'\nThe training dataset size: {x_train.shape[0]}')
-    f1.write(f'\nThe testing dataset size: {x_test.shape[0]}')
-    f1.write(f'\nThe training accuracy: {accuracy*100} %\n')
-    f1.write("The testing accuracy: %.2f%%" % (scores[1]*100))
-    f1.close()
-
-
-    results_filepath = f'./static_results.txt'
-    f1 = open(results_filepath, "a")
-    f1.write(f'\n{id},{x_train.shape[0]},{x_test.shape[0]},{epoch_convergence},{accuracy*100},{scores[1]*100}')
     
+    os.makedirs(f"./Results/{id}",exist_ok=True)
+    results_filepath = f'./Results/{id}/rnn_training.txt'
+    with open(results_filepath, 'r+') as f1:
+        lines = f1.readlines()
+    f1 = open(results_filepath, 'a')
+    if lines == []:
+        f1.write('ID,Time,Train_set_size,Test_set_size,convergence_epoch,training_acc,testing_acc')
+        f1.write(f'\n{id},{args.times},{x_train.shape[0]},{x_test.shape[0]},{epoch_convergence},{accuracy*100},{scores[1]*100}')
+    else:
+        f1.write(f'\n{id},{args.times},{x_train.shape[0]},{x_test.shape[0]},{epoch_convergence},{accuracy*100},{scores[1]*100}')
+    f1.close()
