@@ -88,4 +88,21 @@ The similarity threshold: 0.95
 The amount of all merging: 305
 The amount of correct merging: 305
 The size of te dev set: 10000
+The max length of a dev word: 300The ID: 6
+Concerning RNN: 6
+The batch size: 10
+The amount of epoch: 25
+The training dataset size: 8000
+The testing dataset size: 2000
+The training accuracy: 100.0 %
+The testing accuracy: 100.00%
+
+The ID: 6
+Concerning Final FSM
+The similarity threshold: 0.9
+The amount of all merging: 354
+The amount of correct merging: 354
+The size of expected states set: 8
+The size of obtained states set: 7
+The size of te dev set: 10000
 The max length of a dev word: 300

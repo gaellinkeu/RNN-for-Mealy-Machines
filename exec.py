@@ -5,8 +5,8 @@ import random
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--n_machines", type=int, default=10)
-    parser.add_argument("--times", type=int, default=5)
+    parser.add_argument("--n_machines", type=int, default=2)
+    parser.add_argument("--times", type=int, default=2)
     return parser.parse_args()
 
 if __name__ == "__main__":
@@ -17,9 +17,10 @@ if __name__ == "__main__":
         print(f'\n\n\n\n The times: {j}\n\n\n')
         for i in range(n_machines):
             id = i
-            os.system(f'python datagenerator.py --id={id} --n_states={id+2}')
-            os.system(f'python train_rnn.py --id={id}')
+            times = j
+            os.system(f'python fsm_initialization.py --id={id} --n_states={id+2} --times={times+1}')
+            os.system(f'python train_rnn.py --id={id} --times={times+1}')
             if i == 0:
-                os.system(f'python extract_mealy.py --new_runtime=1 --id={id}')
+                os.system(f'python extract_mealy.py --new_runtime=1 --id={id} --times={times+1}')
             else:
-                os.system(f'python extract_mealy.py --id={id}')
+                os.system(f'python extract_mealy.py --id={id} --times={times+1}')

@@ -3,6 +3,43 @@ import sys, os
 from mealy_machine import *
 import random
 
+def random_selection(data, size):
+    index = []
+    output = []
+    while len(index) < size:
+        n = random.randint(0, len(data)-1)
+        if n not in index:
+            index.append(n)
+    for i in index:
+        output.append(data[i])
+    return output
+
+def train_test_split(data, labels, train_size, val_size=0):
+    val_size = 2 * train_size
+    train_corpus, train_labels, val_corpus, val_labels = [], [], [], []
+    
+    index = []
+    while len(index) < train_size:
+        n = random.randint(0, len(data)-1)
+        if n not in index:
+            index.append(n)
+    for i in index:
+        train_corpus.append(data[i])
+        train_labels.append(labels[i])
+
+    index2 = []
+    while len(index2) < val_size:
+        n = random.randint(0, len(data)-1)
+        if n in index or n in index2: 
+            continue
+        index2.append(n)
+    for i in index2:
+        val_corpus.append(data[i])
+        val_labels.append(labels[i])
+
+    return train_corpus, train_labels, val_corpus, val_labels
+
+
 def randomWord(min_length, max_length, vocab) -> str:
     word = ""
     length = random.randrange(min_length, max_length)
@@ -176,12 +213,12 @@ def euclidian(h1, h2):
 
 # Check the equivalence between two fsm
 def fsm_equivalence(fsm1 : Mealy, fsm2 : Mealy):
-    if set(fsm1.inputAlphabet) != set(fsm2.inputAlphabet):
+    """if set(fsm1.inputAlphabet) != set(fsm2.inputAlphabet):
         print('The two FSM don\'t have the same input set' )
         return 0
     if set(fsm1.outputAlphabet) != set(fsm2.outputAlphabet):
         print('The two FSM don\'t have the same output set' )
-        return 0
+        return 0"""
     start = (fsm1.root, fsm2.root)
     inputAlphabet = set(fsm1.inputAlphabet + fsm2.inputAlphabet)
     outputAlphabet = set(fsm1.outputAlphabet + fsm2.outputAlphabet)

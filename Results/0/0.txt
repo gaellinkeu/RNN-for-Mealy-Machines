@@ -1,0 +1,2 @@
+ID,Time,final_acc,dev_acc,init_acc,init_dev_acc,all_merges,correct_merges,state_set_size
+0,0,100.0,100.0,100.0,2.1,402,402,5

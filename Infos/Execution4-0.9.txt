@@ -1,0 +1,11 @@
+
+
+The ID: 4
+Concerning Final FSM
+The similarity threshold: 0.9
+The amount of all merging: 194
+The amount of correct merging: 193
+The size of expected states set: 6
+The size of obtained states set: 12
+The size of te dev set: 10000
+The max length of a dev word: 500

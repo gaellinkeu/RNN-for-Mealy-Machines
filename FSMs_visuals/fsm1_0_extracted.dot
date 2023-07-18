@@ -1,0 +1,37 @@
+digraph fsm {
+	s_0 [root=true]
+	s_173
+	s_92
+	s_102
+	s_64
+	s_1
+	s_253
+	s_254
+	s_130
+	s_172
+	s_0 -> s_173 [label="b/1"]
+	s_173 -> s_92 [label="a/1"]
+	s_92 -> s_92 [label="a/1"]
+	s_92 -> s_102 [label="b/0"]
+	s_102 -> s_64 [label="b/0"]
+	s_64 -> s_1 [label="b/1"]
+	s_102 -> s_253 [label="a/1"]
+	s_253 -> s_254 [label="b/0"]
+	s_254 -> s_253 [label="a/1"]
+	s_254 -> s_64 [label="b/0"]
+	s_1 -> s_92 [label="a/1"]
+	s_64 -> s_130 [label="a/0"]
+	s_130 -> s_130 [label="a/0"]
+	s_130 -> s_173 [label="b/1"]
+	s_253 -> s_92 [label="a/1"]
+	s_173 -> s_254 [label="b/0"]
+	s_254 -> s_172 [label="b/0"]
+	s_172 -> s_173 [label="b/1"]
+	s_254 -> s_92 [label="a/1"]
+	s_172 -> s_130 [label="a/0"]
+	s_130 -> s_1 [label="b/1"]
+	s_1 -> s_102 [label="b/0"]
+	s_92 -> s_254 [label="b/0"]
+	s_0 -> s_130 [label="a/0"]
+	s_1 -> s_254 [label="b/0"]
+}

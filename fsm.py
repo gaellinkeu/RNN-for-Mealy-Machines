@@ -1,5 +1,6 @@
 # Original author : Omer Nguena Timo
 # Modified by: Gaël Linkeu
+
 from state import State
 from transition import Transition
 import os
@@ -86,6 +87,8 @@ class FSM :
       rst+= f'digraph fsm' + "{"
       for cle in self._statesById.keys() :
          rst += "\n\t" + self._statesById[cle].toDot()
+      rst += "\n\tqi [shape = point]"
+      rst += f'\n\tqi -> s_{self._initial.id}'
       
       for cle in self._transitionsById.keys() :
          rst += "\n\t" + self._transitionsById[cle].toDot()
@@ -113,9 +116,9 @@ class FSM :
       for x in transitions:
          print(f'-> {x._src._id} --> {x._input}/{x._output} --> {x._tgt._id}')
 
-   def save(self, id=0):
+   def save(self, id=0, times=0):
       os.makedirs(f"./FSMs",exist_ok=True)
-      f1 = open(f"./FSMs/fsm{id}.txt", "w")
+      f1 = open(f"./FSMs/fsm{id}_{times}.txt", "w")
       f1.write(f'{id}\n')
 
       states = []
@@ -128,6 +131,12 @@ class FSM :
 
       f1.write(f'{states}\n')
       f1.write(f'{transitions}\n')
+      f1.close()
+
+      os.makedirs(f"./FSMs_visuals",exist_ok=True)
+      f1 = open(f"./FSMs_visuals/fsm{id}_{times}.dot", "w")
+      f1.write(self.toDot())
+      f1.close()
 
 
    

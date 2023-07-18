@@ -199,6 +199,23 @@ class Mealy(object):
 
         return res, correct_sub
     
+    def toDot(self):
+        rst = 'digraph fsm {'
+        for x in self.states:
+            if self.root == x:
+                rst += f'\n\ts_{x} [root=true]'
+            else:
+                rst += f'\n\ts_{x}'
+
+      	rst += "\n\tqi [shape = point]"
+      	rst += f'\n\tqi -> s_{self._initial.id}'
+        
+        for x in self.transitions:
+            rst += f'\n\ts_{x[0]} -> s_{x[3]} [label="{x[1]}/{x[2]}"]'
+
+        rst += '\n}'
+        return rst 
+    
     def save(self):
         os.makedirs(f"./FSMs_extracted",exist_ok=True)
         f1 = open(f"./FSMs_extracted/fsm{self.id}.txt", "w")
