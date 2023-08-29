@@ -6,6 +6,7 @@ import numpy as np
 from tqdm import trange
 import tensorflow as tf
 from tensorflow import keras
+#from keras import EarlyStopping
 from sklearn.model_selection import train_test_split
 import pickle
 
@@ -13,13 +14,12 @@ import pickle
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--id", type=int, default=0)
-    parser.add_argument("--train_length", type=int, default=10)
     parser.add_argument("--n_train_low", type=int, default=2)
     parser.add_argument("--n_train_high", type=int, default=300)
     parser.add_argument("--test_size", type=float, default=0.2)
     parser.add_argument("--batch_size", type=int, default=10)
-    parser.add_argument("--n_epochs", type=int, default=25)
-    parser.add_argument("--hidden_size", type=int, default=100)
+    parser.add_argument("--n_epochs", type=int, default=30)
+    parser.add_argument("--hidden_size", type=int, default=10)
     parser.add_argument("--times", type=int, default=0)
     return parser.parse_args()
 
@@ -29,19 +29,20 @@ if __name__ == "__main__":
     args = parse_args()
 
     id = args.id
-    n_epochs = args.n_epochs
+    """n_epochs = args.n_epochs
 
     if id > 2:
         n_epochs *= 2
     if id > 5:
-        n_epochs *= 2 
+        n_epochs *= 2 """
+    n_epochs = args.n_epochs
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='accuracy', patience=5, restore_best_weights=True)
 
     print('\n\n\n'+'*'*20+f' ID {id} TIMES {args.times}: '+' TRAINING THE RECURRENT NEURAL NETWORK '+'*'*20+'\n\n\n')
     #max_length = 4
     #corpus = ['ba', 'b', 'a', 'baa', 'a', 'baaa', 'aa', 'b', 'abaa', 'abb', 'bb']
     #labels = ['11', '1', '1', '110', '1', '1100', '10', '1', '1010', '101', '11']
-    corpus, labels = get_data(f'./datasets/dataset{id}_{args.times}.txt')
-
+    corpus, labels = get_data(f'./datasets/dataset{id}.txt')
 
     max_length = len(max(corpus, key=len))
 
@@ -78,12 +79,13 @@ if __name__ == "__main__":
     model = Tagger(4, 10, 10, 3)
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-    history = model.fit(x_train, y_train, args.batch_size, n_epochs)
+    #history = model.fit(x_train, y_train, args.batch_size, n_epochs, callbacks=[early_stopping])
+    history = model.fit(x_train, y_train, args.batch_size, n_epochs, callbacks=early_stopping)
     # bacth de taille 2
 
     # Saving weights
     os.makedirs(f"./weights",exist_ok=True)
-    filename = f'./weights/weights{id}_{args.times}.txt'
+    filename = f'./weights/weights{id}.txt'
     with open(filename, 'wb') as f:
         pickle.dump(model.get_weights(), f)
     
@@ -106,13 +108,12 @@ if __name__ == "__main__":
     scores = model.evaluate(x_test, y_test, verbose=0)
     print("\n The testing accuracy: %.2f%%" % (scores[1]*100))
 
-    
     os.makedirs(f"./Results/{id}",exist_ok=True)
     results_filepath = f'./Results/{id}/rnn_training.txt'
-    with open(results_filepath, 'r+') as f1:
-        lines = f1.readlines()
-    f1 = open(results_filepath, 'a')
-    if lines == []:
+    
+    f1 = open(results_filepath, 'a+')
+    lines = f1.readlines()
+    if os.path.getsize(results_filepath) == 0:
         f1.write('ID,Time,Train_set_size,Test_set_size,convergence_epoch,training_acc,testing_acc')
         f1.write(f'\n{id},{args.times},{x_train.shape[0]},{x_test.shape[0]},{epoch_convergence},{accuracy*100},{scores[1]*100}')
     else:

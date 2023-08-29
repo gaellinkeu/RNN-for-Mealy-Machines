@@ -1,0 +1,19 @@
+
+
+The ID: 0
+Concerning Final FSM
+The similarity threshold: 0.4
+The amount of all merging: 392
+The amount of correct merging: 392
+
+The ID: 0
+Concerning Final FSM
+The similarity threshold: 0.4
+The amount of all merging: 341
+The amount of correct merging: 341
+
+The ID: 0
+Concerning Final FSM
+The similarity threshold: 0.4
+The amount of all merging: 365
+The amount of correct merging: 365

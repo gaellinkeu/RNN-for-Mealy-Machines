@@ -9,3 +9,4 @@ for x in range (0,9):
     sys.stdout.write('\r'+b)
     time.sleep(0.5)
 #print (a)
+

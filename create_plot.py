@@ -23,10 +23,10 @@ def create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_data, id, th
 
     fig, ax = plt.subplots()
 
-    ax.plot(n_data, mean_train_acc, linestyle='-', color='green', label='train')
-    ax.plot(n_data, init_mean_train_acc, linestyle='--', lw=2, color='green', label='initial train')
-    ax.plot(n_data, mean_dev_acc, linestyle='-', color='red', label='dev')
-    ax.plot(n_data, init_mean_dev_acc, linestyle='--', lw=2, color='red', label='initial dev')
+    ax.plot(n_data, mean_train_acc, linestyle='-', color='green', label='Entrainnement sur l\'arbre')
+    ax.plot(n_data, init_mean_train_acc, linestyle='--', lw=2, color='green', label='Entrainnement sur l\'arbre')
+    ax.plot(n_data, mean_dev_acc, linestyle='-', color='red', label='Test sur la machine')
+    ax.plot(n_data, init_mean_dev_acc, linestyle='--', lw=2, color='red', label='Test sur l\'arbre')
 
     ax.fill_between(n_data, mean_train_acc - std_train_acc, mean_train_acc + std_train_acc, alpha = 0.3)
     ax.fill_between(n_data, mean_dev_acc - std_dev_acc, mean_dev_acc + std_dev_acc, color='red', alpha = 0.3)
@@ -35,16 +35,16 @@ def create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_data, id, th
     ax.set_xlabel("#data")
     ax.set_ylabel("Accuracy")
     names_dict = {
-        0: "Machines with 2 states",
-        1: "Machines with 3 states",
-        2: "Machines with 4 states",
-        3: "Machines with 5 states",
-        4: "Machines with 6 states",
-        5: "Machines with 7 states",
-        6: "Machines with 8 states",
-        7: "Machines with 9 states",
-        8: "Machines with 10 states",
-        9: "Machines with 11 states"
+        0: "Machines avec 2 états",
+        1: "Machines avec 3 états",
+        2: "Machines avec 4 états",
+        3: "Machines avec 5 états",
+        4: "Machines avec 6 états",
+        5: "Machines avec 7 états",
+        6: "Machines avec 8 états",
+        7: "Machines avec 9 états",
+        8: "Machines avec 10 états",
+        9: "Machines avec 11 états"
     }
     if (epoch == "best"):
         # Do not mention epoch in the title
@@ -62,4 +62,4 @@ def create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_data, id, th
     plotname = f"./images_b4_ICML/{day}/acc-{id}-{str(threshold)}-{epoch}-{eval}.png"
     print(f"Saved {plotname}")
     plt.savefig(plotname)
-    plt.show()
+    # plt.show()

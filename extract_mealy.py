@@ -6,7 +6,6 @@ from copy import deepcopy
 from mealy_trie import Trie
 from mealy_machine import Mealy
 from utils import *
-from mealy_machine import Mealy
 
 import os
 import numpy as np
@@ -21,17 +20,17 @@ from create_plot import create_plot
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--id", type=int, default=0)
-    parser.add_argument("--n_train_low", type=int, default=99)
-    parser.add_argument("--n_train_high", type=int, default=100)
-    parser.add_argument("--dev_length", type=int, default=10000)
+    parser.add_argument("--dev_length", type=int, default=1000)
+    parser.add_argument("--n_train_low", type=int, default=1)
+    parser.add_argument("--n_train_high", type=int, default=80)
     parser.add_argument("--word_dev_low", type=int, default=1)
-    parser.add_argument("--word_dev_high", type=int, default=300)
-    parser.add_argument("--sim_threshold", type=float, default=.80)
+    parser.add_argument("--word_dev_high", type=int, default=100)
+    parser.add_argument("--sim_threshold", type=float, default=.99)
     parser.add_argument("--find_threshold", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("--similarity_effect", type=int, default=0)
     parser.add_argument("--seeds", type=int, default=1)
     parser.add_argument("--hidden_size", type=float, default=10)
-    parser.add_argument('--eval', type=str, default="preds")
+    parser.add_argument('--eval', type=str, default="labels")
     parser.add_argument('--epoch', type=str, default="best")    
     parser.add_argument('--times', type=int, default=0)
     parser.add_argument("--new_runtime", type=int, default=0)
@@ -121,6 +120,7 @@ def cosine_merging(fsm, states, threshold):
     #print(f'\nThe total amount of merging is: {all_merges}\n')
     #print(f'\nThe total amount of correct merging is: {correct_merges}\n')
     #fsm_.print()
+    
     fsm_.removeDuplicate()
     fsm_.id = str(fsm_.id) + 'min'
     return fsm_, all_merges, correct_merges
@@ -148,46 +148,49 @@ if __name__ == "__main__" :
     init_train_acc, init_dev_acc, train_acc, dev_acc = {}, {}, {}, {}
     state_set_size = {}
 
-    print('\n\n\n'+'*'*20+f' ID {id} TIMES {args.times}: '+' EXTRACTION OF MEALY MACHINE FROM RNN '+'*'*20+'\n\n\n')
+    print('\n\n\n'+'*'*20+f' ID {id} : '+' EXTRACTION OF MEALY MACHINE FROM RNN '+'*'*20+'\n\n\n')
 
     
-    fsm_filepath = f'./FSMs/fsm{id}_{args.times}.txt'
+    fsm_filepath = f'./FSMs/fsm{id}.txt'
     expected_fsm = getFsm(fsm_filepath)
-    
-    dev_corpus = []
-    dev_labels = []
-    for _ in range(args.dev_length):
-        word = randomWord(args.word_dev_low, args.word_dev_high, expected_fsm.inputAlphabet)
-        dev_corpus.append(word)
-        dev_labels.append(expected_fsm.return_output(word))
 
-    max_length_dev = len(max(dev_corpus, key=len))
-
-
-    data_filepath = f'./datasets/dataset{id}_{args.times}.txt'
+    data_filepath = f'./datasets/dataset{id}.txt'
+            
         
-    
     if args.similarity_effect:
         n_train = range(100,101)
     else:
         n_train = range(args.n_train_low, args.n_train_high)
-    #n_train = range(2,5)
-
-    n_dev = range(args.word_dev_low, args.word_dev_high)
-
-    os.makedirs(f"./Results",exist_ok=True)
-    os.makedirs(f"./Results/{id}",exist_ok=True)
-    info_filepath = f'./Results/{id}/{args.times}.txt'
-    f1 = open(info_filepath, "a")
-    f1.write('ID,Epoch,data_size,final_acc,dev_acc,init_acc,init_dev_acc,all_merges,correct_merges,state_set_size\n')
-
+    
     for seed in range(args.seeds):
         random.seed(seed)
+        dev_corpus = []
+        dev_labels = []
+        for _ in range(args.dev_length):
+            word = randomWord(args.word_dev_low, args.word_dev_high, expected_fsm.inputAlphabet)
+            dev_corpus.append(word)
+            dev_labels.append(expected_fsm.return_output(word))
+
+        max_length_dev = len(max(dev_corpus, key=len))
+
+        #n_train = range(2,5)
+
+
+        os.makedirs(f"./Results",exist_ok=True)
+        os.makedirs(f"./Results/{id}",exist_ok=True)
+        info_filepath = f'./Results/{id}/main.txt'
+
+        f1 = open(info_filepath, 'a+')
+        lines = f1.readlines()
+        if os.path.getsize(info_filepath) == 0:
+            f1.write('ID,Time,data,Final_acc,Final_dev_acc,initial_train_acc,initial_dev_acc,all_merges,correct_merges,state_set_size,equivalence\n')
+
+    
         init_train_acc[seed], init_dev_acc[seed], train_acc[seed], dev_acc[seed] = [], [], [], []
         state_set_size[seed] = []
         for n in n_train:
             print()
-            
+
             sim_threshold = args.sim_threshold
 
             """dev_corpus = corpus[split_index:]
@@ -221,7 +224,7 @@ if __name__ == "__main__" :
 
             trained_model = Tagger(4, 10, args.hidden_size, 3)
             trained_model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-            filename = f'./weights/weights{id}_{args.times}.txt'
+            filename = f'./weights/weights{id}.txt'
             with open(filename, 'rb') as f:
                 weights = pickle.load(f)
 
@@ -285,11 +288,33 @@ if __name__ == "__main__" :
             else:
                 print(f'We used the threshold : {sim_threshold}')
                 merged_fsm, all_merges, correct_merges = cosine_merging(redundant_fsm, states, threshold=sim_threshold)
+            
             print('\--> Merging stage... Done\n')
-            merged_fsm.save()
             merged_fsm.print(print_all=True)
+            merged_fsm.save(f"./FSMs_extracted_first", sim_threshold)
+    
+            print('\--> Minimization stage... Done\n')
 
-            f1.write(f'{id},{args.times},{n},')
+            if merged_fsm.is_output_deterministic():
+                MM_extracted_filepath = f'./FSMs_visuals/fsm{id}_{args.sim_threshold}_first_extracted.dot'
+                f = open(MM_extracted_filepath, "w")
+                f.write(merged_fsm.toDot())
+                f.close()
+                isd, st = merged_fsm.is_state_deterministic()
+                if not isd:
+                    s = [list(x.values()) for x in st]
+                    #print(s)
+                    merged_fsm.final_merges(s)
+                if merged_fsm.determinize():
+                    #if merged_fsm.is_complete():
+                    merged_fsm.minimize()
+            
+            merged_fsm.save(f"./FSMs_extracted", sim_threshold)
+            merged_fsm.print(print_all=True)
+            print('\--> Merged FSM saved stage... Done\n')
+            
+            f1.write(f'{id},{seed},')
+            f1.write(f'{n},')
             # Evaluate performance
             _acc = score_all_prefixes(merged_fsm, corpus, labels)
             train_acc[seed].append(_acc)
@@ -308,10 +333,18 @@ if __name__ == "__main__" :
             f1.write(f'{all_merges},{correct_merges},')
 
             state_set_size[seed].append(len(merged_fsm.states))
-            f1.write(f'{len(merged_fsm.states)}\n')
+            f1.write(f'{len(merged_fsm.states)},')
 
-                
-    #create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_train, args.id, sim_threshold, args.epoch, args.eval)
+            equivalence = fsm_equivalence(expected_fsm, merged_fsm)
+            f1.write(f'{equivalence}\n')
+
+    f1.close()      
+    create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_train, args.id, sim_threshold, args.epoch, args.eval)
+    print('\--> Plot saving stage... Done\n')
+    
+    
+        
+
 
     # Checking the equivalence between the expected and the obtained machine
     equivalence = fsm_equivalence(expected_fsm, merged_fsm)
@@ -328,12 +361,13 @@ if __name__ == "__main__" :
     print(f'\n*************   THE ACCURACY IS :   {_dev_acc} %  *****************')
 
     os.makedirs(f"./Infos",exist_ok=True)
-    info_filepath = f'./Infos/Execution{id}-{args.times}-{sim_threshold}.txt'
+    info_filepath = f'./Infos/Execution{id}-{args.sim_threshold}.txt'
     f1 = open(info_filepath, "a")
     f1.write(f'\n\nThe ID: {id}')
     f1.write(f'\nThe times: {args.times}')
     f1.write(f'\nConcerning Final FSM')
     f1.write(f'\nThe similarity threshold: {args.sim_threshold}')
+    f1.write(f'\nThe equivalence decision: {equivalence}')
     f1.write(f'\nThe amount of all merging: {all_merges}')
     f1.write(f'\nThe amount of correct merging: {correct_merges}')
     f1.write(f'\nThe size of expected states set: {len(expected_fsm.states)}')
@@ -345,13 +379,13 @@ if __name__ == "__main__" :
 
     day = date.today()
     
-    results_filepath = f'./static_results_extract2.txt'
+    results_filepath = f'./static_results_extract.txt'
     f1 = open(results_filepath, "a")
     f1.write(f'\n{id},{args.times},{sim_threshold},{len(expected_fsm.states)},{len(merged_fsm.states)},{equivalence},{_init_dev_acc},{_dev_acc}')
     f1.close()
             #f1.write(f',{len(dev_corpus)},{len(corpus)},{sim_threshold},{all_merges},{correct_merges},{len(expected_fsm.states)},{len(merged_fsm.states)},{equivalence},{dev_accuracy}')
         
-    MM_extracted_filepath = f'./FSMs_visuals/fsm{id}_{args.times}_extracted.dot'
+    MM_extracted_filepath = f'./FSMs_visuals/fsm{id}_{args.sim_threshold}_extracted.dot'
     f1 = open(MM_extracted_filepath, "w")
     f1.write(merged_fsm.toDot())
     f1.close()

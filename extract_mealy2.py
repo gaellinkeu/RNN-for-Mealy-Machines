@@ -113,7 +113,7 @@ def cosine_merging(fsm, states, threshold):
     print(f'\nThe total amount of correct merging is: {correct_merge}\n')
     #fsm_.print()
     fsm_.removeDuplicate()
-    fsm_.id = str(fsm_.id) + 'min'
+    fsm_.id = str(fsm_.id) + f'min_{args.sim_threshold}'
     return fsm_, all_merge, correct_merge
 
 def cross_validate(left, right, fsm, states, states_mask, val_sents, val_gold, symmetric=False):
@@ -279,7 +279,7 @@ if __name__ == "__main__" :
     print(f'\n*************   THE ACCURACY IS :   {dev_accuracy} %  *****************')
 
     os.makedirs(f"./Infos",exist_ok=True)
-    info_filepath = f'./Infos/Execution {id}.txt'
+    info_filepath = f'./Infos/Execution {id}_{args.sim_threshold}.txt'
     f1 = open(info_filepath, "a")
     f1.write(f'\n\nThe ID: {id}')
     f1.write(f'\nConcerning Final FSM')
@@ -299,4 +299,10 @@ if __name__ == "__main__" :
                 
 
     f1 = open(checkout_path, "a")
-    f1.write(f'{id} | {len(dev_corpus)} words | {dev_accuracy}\n')
+    f1.write(f'{id} | {args.sim_threshold} |{len(dev_corpus)} words | {dev_accuracy}\n')
+    f1.close()
+
+    MM_extracted_filepath = f'./FSMs_visuals/fsm{id}_{args.sim_threshold}_extracted.dot'
+    f1 = open(MM_extracted_filepath, "w")
+    f1.write(merged_fsm.toDot())
+    f1.close()
