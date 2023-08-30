@@ -23,7 +23,7 @@ def create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_data, id, th
 
     fig, ax = plt.subplots()
 
-    ax.plot(n_data, mean_train_acc, linestyle='-', color='green', label='Entrainnement sur l\'arbre')
+    ax.plot(n_data, mean_train_acc, linestyle='-', color='green', label='Entrainnement sur la machine')
     ax.plot(n_data, init_mean_train_acc, linestyle='--', lw=2, color='green', label='Entrainnement sur l\'arbre')
     ax.plot(n_data, mean_dev_acc, linestyle='-', color='red', label='Test sur la machine')
     ax.plot(n_data, init_mean_dev_acc, linestyle='--', lw=2, color='red', label='Test sur l\'arbre')

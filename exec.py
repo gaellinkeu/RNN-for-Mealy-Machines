@@ -29,8 +29,8 @@ if __name__ == "__main__":
     args = parse_args()
 
     n_machines = args.n_machines
-    for i in range(n_machines):
-        os.system(f'python fsm_initialization.py --id={i} --n_states={i+2}')
+    # for i in range(n_machines):
+    #     os.system(f'python fsm_initialization.py --id={i} --n_states={i+2}')
    
     for i in range(n_machines):
         os.system(f'python train_rnn.py --id={i}')

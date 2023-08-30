@@ -1,0 +1,96 @@
+digraph fsm {
+	s_0 [root=true]
+	s_1
+	s_2
+	s_3
+	s_4
+	s_5
+	s_6
+	s_44
+	s_45
+	s_14
+	s_232
+	s_107
+	s_58
+	s_15
+	s_66
+	s_266
+	s_163
+	s_19
+	s_20
+	s_264
+	s_265
+	s_22
+	s_87
+	s_279
+	s_8
+	s_9
+	s_33
+	s_34
+	s_35
+	s_47
+	s_46
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_1 [label="b/0"]
+	s_1 -> s_2 [label="a/1"]
+	s_2 -> s_3 [label="a/0"]
+	s_3 -> s_4 [label="b/0"]
+	s_4 -> s_5 [label="a/0"]
+	s_5 -> s_6 [label="b/0"]
+	s_6 -> s_5 [label="a/0"]
+	s_5 -> s_44 [label="a/1"]
+	s_44 -> s_45 [label="b/0"]
+	s_45 -> s_2 [label="a/1"]
+	s_3 -> s_14 [label="a/1"]
+	s_14 -> s_232 [label="b/0"]
+	s_2 -> s_107 [label="b/0"]
+	s_107 -> s_2 [label="a/1"]
+	s_4 -> s_58 [label="b/0"]
+	s_58 -> s_2 [label="a/1"]
+	s_14 -> s_15 [label="a/0"]
+	s_15 -> s_4 [label="b/0"]
+	s_44 -> s_66 [label="a/0"]
+	s_58 -> s_266 [label="b/1"]
+	s_232 -> s_2 [label="a/1"]
+	s_107 -> s_163 [label="b/1"]
+	s_163 -> s_19 [label="b/1"]
+	s_19 -> s_20 [label="b/1"]
+	s_15 -> s_14 [label="a/1"]
+	s_19 -> s_264 [label="a/1"]
+	s_264 -> s_265 [label="b/0"]
+	s_20 -> s_264 [label="a/1"]
+	s_264 -> s_5 [label="a/0"]
+	s_1 -> s_22 [label="b/1"]
+	s_22 -> s_87 [label="b/1"]
+	s_87 -> s_264 [label="a/1"]
+	s_265 -> s_266 [label="b/1"]
+	s_266 -> s_264 [label="a/1"]
+	s_87 -> s_20 [label="b/1"]
+	s_265 -> s_2 [label="a/1"]
+	s_20 -> s_19 [label="b/1"]
+	s_22 -> s_264 [label="a/1"]
+	s_163 -> s_264 [label="a/1"]
+	s_266 -> s_279 [label="b/1"]
+	s_279 -> s_264 [label="a/1"]
+	s_66 -> s_4 [label="b/0"]
+	s_6 -> s_265 [label="b/0"]
+	s_0 -> s_8 [label="a/1"]
+	s_8 -> s_9 [label="b/0"]
+	s_9 -> s_2 [label="a/1"]
+	s_232 -> s_163 [label="b/1"]
+	s_279 -> s_279 [label="b/1"]
+	s_9 -> s_22 [label="b/1"]
+	s_8 -> s_33 [label="a/1"]
+	s_33 -> s_34 [label="a/1"]
+	s_34 -> s_35 [label="b/0"]
+	s_35 -> s_22 [label="b/1"]
+	s_35 -> s_47 [label="a/1"]
+	s_47 -> s_3 [label="a/0"]
+	s_34 -> s_34 [label="a/1"]
+	s_47 -> s_45 [label="b/0"]
+	s_33 -> s_46 [label="b/0"]
+	s_46 -> s_47 [label="a/1"]
+	s_45 -> s_22 [label="b/1"]
+	s_46 -> s_22 [label="b/1"]
+}

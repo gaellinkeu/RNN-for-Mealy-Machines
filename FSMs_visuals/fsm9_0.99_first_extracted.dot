@@ -1,0 +1,72 @@
+digraph fsm {
+	s_0 [root=true]
+	s_1
+	s_2
+	s_67
+	s_208
+	s_207
+	s_210
+	s_68
+	s_102
+	s_206
+	s_12
+	s_13
+	s_14
+	s_230
+	s_84
+	s_231
+	s_233
+	s_28
+	s_17
+	s_18
+	s_39
+	s_64
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_1 [label="a/0"]
+	s_1 -> s_2 [label="b/0"]
+	s_2 -> s_67 [label="b/1"]
+	s_67 -> s_208 [label="b/1"]
+	s_208 -> s_207 [label="a/1"]
+	s_207 -> s_208 [label="b/1"]
+	s_207 -> s_210 [label="a/1"]
+	s_210 -> s_210 [label="a/1"]
+	s_208 -> s_208 [label="b/1"]
+	s_67 -> s_207 [label="a/1"]
+	s_210 -> s_208 [label="b/1"]
+	s_2 -> s_67 [label="a/1"]
+	s_67 -> s_68 [label="a/1"]
+	s_68 -> s_208 [label="b/1"]
+	s_68 -> s_102 [label="a/1"]
+	s_102 -> s_102 [label="a/1"]
+	s_102 -> s_206 [label="b/1"]
+	s_206 -> s_207 [label="a/1"]
+	s_1 -> s_12 [label="a/1"]
+	s_12 -> s_13 [label="a/1"]
+	s_13 -> s_14 [label="a/1"]
+	s_14 -> s_13 [label="b/1"]
+	s_13 -> s_2 [label="b/0"]
+	s_67 -> s_230 [label="b/1"]
+	s_230 -> s_207 [label="a/1"]
+	s_14 -> s_13 [label="a/1"]
+	s_68 -> s_84 [label="b/1"]
+	s_84 -> s_207 [label="a/1"]
+	s_230 -> s_231 [label="b/1"]
+	s_231 -> s_231 [label="b/1"]
+	s_231 -> s_233 [label="a/1"]
+	s_12 -> s_28 [label="b/1"]
+	s_28 -> s_2 [label="b/0"]
+	s_68 -> s_210 [label="a/1"]
+	s_28 -> s_14 [label="a/1"]
+	s_0 -> s_17 [label="b/1"]
+	s_17 -> s_18 [label="b/1"]
+	s_18 -> s_2 [label="b/0"]
+	s_84 -> s_208 [label="b/1"]
+	s_18 -> s_39 [label="a/1"]
+	s_39 -> s_13 [label="a/1"]
+	s_39 -> s_64 [label="b/1"]
+	s_64 -> s_2 [label="b/0"]
+	s_64 -> s_14 [label="a/1"]
+	s_17 -> s_13 [label="a/1"]
+	s_14 -> s_64 [label="b/1"]
+}

@@ -1,0 +1,2 @@
+ID,Time,Train_set_size,Test_set_size,convergence_epoch,training_acc,testing_acc
+8,0,8000,2000,6,100.0,100.0

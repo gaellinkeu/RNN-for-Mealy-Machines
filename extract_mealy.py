@@ -21,7 +21,7 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--id", type=int, default=0)
     parser.add_argument("--dev_length", type=int, default=1000)
-    parser.add_argument("--n_train_low", type=int, default=1)
+    parser.add_argument("--n_train_low", type=int, default=2)
     parser.add_argument("--n_train_high", type=int, default=80)
     parser.add_argument("--word_dev_low", type=int, default=1)
     parser.add_argument("--word_dev_high", type=int, default=100)
@@ -189,7 +189,7 @@ if __name__ == "__main__" :
         init_train_acc[seed], init_dev_acc[seed], train_acc[seed], dev_acc[seed] = [], [], [], []
         state_set_size[seed] = []
         for n in n_train:
-            print()
+            print(f'We train the      {n}       data')
 
             sim_threshold = args.sim_threshold
 
@@ -202,8 +202,8 @@ if __name__ == "__main__" :
             #corpus, labels, val_corpus, val_labels = train_test_split(corpus, labels, n)
             val_corpus = corpus[n:2*n]
             val_labels = labels[n:2*n]
-            corpus = corpus[:n]
-            labels = labels[:n]
+            corpus = corpus[-n:]
+            labels = labels[-n:]
 
             max_length_corpus = len(max(corpus, key=len))
 
@@ -305,9 +305,9 @@ if __name__ == "__main__" :
                     s = [list(x.values()) for x in st]
                     #print(s)
                     merged_fsm.final_merges(s)
-                if merged_fsm.determinize():
-                    #if merged_fsm.is_complete():
-                    merged_fsm.minimize()
+                # if merged_fsm.determinize():
+                #     #if merged_fsm.is_complete():
+                merged_fsm.minimize()
             
             merged_fsm.save(f"./FSMs_extracted", sim_threshold)
             merged_fsm.print(print_all=True)
