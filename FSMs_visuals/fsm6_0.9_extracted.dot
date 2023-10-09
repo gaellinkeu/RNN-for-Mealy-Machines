@@ -1,0 +1,111 @@
+digraph fsm {
+	s_0 [root=true]
+	s_1
+	s_2
+	s_3
+	s_4
+	s_65
+	s_256
+	s_67
+	s_22
+	s_198
+	s_365
+	s_90
+	s_366
+	s_37
+	s_56
+	s_57
+	s_28
+	s_38
+	s_384
+	s_64
+	s_70
+	s_211
+	s_262
+	s_263
+	s_108
+	s_109
+	s_265
+	s_332
+	s_137
+	s_136
+	s_268
+	s_307
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_1 [label="b/1"]
+	s_1 -> s_2 [label="b/0"]
+	s_2 -> s_3 [label="a/0"]
+	s_3 -> s_4 [label="b/1"]
+	s_4 -> s_65 [label="a/1"]
+	s_65 -> s_256 [label="a/0"]
+	s_256 -> s_256 [label="a/0"]
+	s_256 -> s_67 [label="b/1"]
+	s_67 -> s_22 [label="b/0"]
+	s_22 -> s_256 [label="a/0"]
+	s_4 -> s_198 [label="b/1"]
+	s_198 -> s_4 [label="b/1"]
+	s_198 -> s_365 [label="a/1"]
+	s_365 -> s_90 [label="b/1"]
+	s_90 -> s_22 [label="a/1"]
+	s_365 -> s_366 [label="a/0"]
+	s_366 -> s_256 [label="a/0"]
+	s_3 -> s_65 [label="a/1"]
+	s_65 -> s_90 [label="b/1"]
+	s_22 -> s_67 [label="b/1"]
+	s_67 -> s_37 [label="a/0"]
+	s_37 -> s_56 [label="a/0"]
+	s_56 -> s_57 [label="a/0"]
+	s_57 -> s_56 [label="a/0"]
+	s_56 -> s_2 [label="b/0"]
+	s_90 -> s_22 [label="b/1"]
+	s_256 -> s_90 [label="b/1"]
+	s_2 -> s_28 [label="b/1"]
+	s_28 -> s_2 [label="b/0"]
+	s_22 -> s_38 [label="b/1"]
+	s_38 -> s_37 [label="a/0"]
+	s_37 -> s_38 [label="b/0"]
+	s_28 -> s_57 [label="a/0"]
+	s_57 -> s_38 [label="b/0"]
+	s_38 -> s_37 [label="b/1"]
+	s_1 -> s_57 [label="a/0"]
+	s_38 -> s_384 [label="a/0"]
+	s_384 -> s_90 [label="b/1"]
+	s_22 -> s_64 [label="b/1"]
+	s_64 -> s_70 [label="b/1"]
+	s_70 -> s_65 [label="a/0"]
+	s_256 -> s_38 [label="b/1"]
+	s_38 -> s_22 [label="b/1"]
+	s_38 -> s_211 [label="b/1"]
+	s_211 -> s_256 [label="a/1"]
+	s_64 -> s_37 [label="a/1"]
+	s_384 -> s_262 [label="a/1"]
+	s_262 -> s_263 [label="a/0"]
+	s_263 -> s_67 [label="b/1"]
+	s_67 -> s_37 [label="b/0"]
+	s_37 -> s_108 [label="a/0"]
+	s_108 -> s_109 [label="b/1"]
+	s_109 -> s_22 [label="b/0"]
+	s_263 -> s_262 [label="a/0"]
+	s_262 -> s_265 [label="b/1"]
+	s_265 -> s_332 [label="a/1"]
+	s_332 -> s_67 [label="b/1"]
+	s_265 -> s_137 [label="b/1"]
+	s_108 -> s_57 [label="a/0"]
+	s_0 -> s_3 [label="a/0"]
+	s_67 -> s_211 [label="a/0"]
+	s_211 -> s_64 [label="b/1"]
+	s_64 -> s_136 [label="b/1"]
+	s_136 -> s_137 [label="b/1"]
+	s_137 -> s_136 [label="b/1"]
+	s_136 -> s_256 [label="a/1"]
+	s_65 -> s_38 [label="b/1"]
+	s_366 -> s_268 [label="b/1"]
+	s_268 -> s_22 [label="b/0"]
+	s_268 -> s_307 [label="a/0"]
+	s_307 -> s_108 [label="a/1"]
+	s_108 -> s_90 [label="b/1"]
+	s_137 -> s_22 [label="a/0"]
+	s_64 -> s_65 [label="a/1"]
+	s_64 -> s_22 [label="a/1"]
+}

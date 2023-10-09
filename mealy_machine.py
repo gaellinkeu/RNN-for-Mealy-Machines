@@ -273,10 +273,11 @@ class Mealy(object):
                     #print(check)
                     #{'b': {'1': [194, 83]}, 'a': {'0': [318, 318]}}
                     # if one state has less than two 2 transitions(one for b and one ofr a)
+                    #print(check)
                     for (p, q) in list(check.items()):
                         if len(list(q.values())[0]) < len(self.inputAlphabet):
                             check[p][list(q.keys())[0]] = check[p][list(q.keys())[0]]*len(self.inputAlphabet)
-
+                    
                     values = list(check.values())
                    
                     # if len(check) == 1:
@@ -294,6 +295,8 @@ class Mealy(object):
                 for j in range(len(min_states[i])):
                     if type(min_states[i][j]) == list:
                         for p in min_states[i][j]:
+                            if len(p) < len(self.inputAlphabet):
+                                continue
                             s1 = min(p[0],p[1])
                             s2 = max(p[0],p[1])
                             if s1 == s2:

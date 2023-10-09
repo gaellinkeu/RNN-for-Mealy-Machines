@@ -1,0 +1,23 @@
+digraph fsm {
+	s_0 [root=true]
+	s_15
+	s_60
+	s_16
+	s_17
+	s_87
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_0 [label="b/0"]
+	s_0 -> s_15 [label="a/0"]
+	s_15 -> s_60 [label="b/1"]
+	s_60 -> s_0 [label="b/0"]
+	s_0 -> s_0 [label="a/0"]
+	s_15 -> s_16 [label="a/1"]
+	s_16 -> s_0 [label="b/0"]
+	s_16 -> s_17 [label="a/0"]
+	s_17 -> s_87 [label="b/0"]
+	s_87 -> s_0 [label="b/0"]
+	s_17 -> s_17 [label="a/0"]
+	s_60 -> s_15 [label="a/0"]
+	s_87 -> s_15 [label="a/0"]
+}

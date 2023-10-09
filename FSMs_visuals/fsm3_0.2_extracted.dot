@@ -1,0 +1,25 @@
+digraph fsm {
+	s_323 [root=true]
+	s_114
+	s_321
+	s_204
+	s_84
+	qi [shape = point]
+	qi -> s_323
+	s_323 -> s_323 [label="b/0"]
+	s_323 -> s_114 [label="a/0"]
+	s_114 -> s_321 [label="b/1"]
+	s_321 -> s_323 [label="b/0"]
+	s_323 -> s_323 [label="a/0"]
+	s_114 -> s_321 [label="a/1"]
+	s_323 -> s_204 [label="a/0"]
+	s_204 -> s_321 [label="a/1"]
+	s_321 -> s_323 [label="a/0"]
+	s_204 -> s_321 [label="b/0"]
+	s_321 -> s_84 [label="b/0"]
+	s_321 -> s_84 [label="a/0"]
+	s_84 -> s_321 [label="b/1"]
+	s_321 -> s_114 [label="a/0"]
+	s_323 -> s_84 [label="b/0"]
+	s_84 -> s_114 [label="a/0"]
+}

@@ -36,6 +36,7 @@ if __name__ == "__main__":
     if id > 5:
         n_epochs *= 2 """
     n_epochs = args.n_epochs
+    # The Training after 5 consecutive epochs and no evolution of the acc
     early_stopping = tf.keras.callbacks.EarlyStopping(monitor='accuracy', patience=5, restore_best_weights=True)
 
     print('\n\n\n'+'*'*20+f' ID {id} TIMES {args.times}: '+' TRAINING THE RECURRENT NEURAL NETWORK '+'*'*20+'\n\n\n')
@@ -50,38 +51,28 @@ if __name__ == "__main__":
     print(f'Corpus : {corpus[:5]}')
     print(f'Labels : {labels[:5]}')
 
-    """dev_size = int(args.dev_percentage * len(corpus))
-    dev_corpus = corpus[len(corpus) - dev_size:]
-    dev_labels = labels[len(corpus) - dev_size:]
-
-    corpus = corpus[:len(corpus) - dev_size]
-    labels = labels[:len(labels) - dev_size]"""
+    # Data Preprocessing
     corpus_, labels_ = preprocessing(corpus, labels, max_length)
 
     
-    """corpus_ = ["e"+x+"z"*(max_length - len(x)) for x in corpus]
-    labels_ = ["0"+x+"2"*(max_length - len(x)) for x in labels]"""
     print(f'\nThe length of corpus is: {len(corpus)}\n')
-
+    # we continue the preprocessing
     x_train = np.array([tokenization(x) for x in corpus_])
     y_train = np.array([class_mapping(x) for x in labels_])
     mask = np.array([masking(x) for x in corpus_])
 
+    # Data splitting
     x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=args.test_size, random_state=42)
-    """version_name = '01'
-    model_dir = os.path.join("weigths", version_name)
-    if not os.path.exists(model_dir):
-        os.makedirs(model_dir)
-    filepath = "weigths/model_weights.h5\""""
+    
 
     optimizer = keras.optimizers.Adam(learning_rate=0.001)
 
+    # Initialization of the model
     model = Tagger(4, 10, 10, 3)
     model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-    #history = model.fit(x_train, y_train, args.batch_size, n_epochs, callbacks=[early_stopping])
     history = model.fit(x_train, y_train, args.batch_size, n_epochs, callbacks=early_stopping)
-    # bacth de taille 2
+
 
     # Saving weights
     os.makedirs(f"./weights",exist_ok=True)
@@ -92,7 +83,7 @@ if __name__ == "__main__":
     loss = history.history['loss'][-1]
     accuracy = history.history['accuracy'][-1]
 
-    # get the epoch where we achieved 100 accuracy
+    # Getting the epoch where we achieved 100 accuracy for the first time
     epoch_convergence = 0
     for i in range(len(history.history['accuracy'])):
         if int(history.history['accuracy'][i]*100) == 100:
@@ -111,6 +102,7 @@ if __name__ == "__main__":
     os.makedirs(f"./Results/{id}",exist_ok=True)
     results_filepath = f'./Results/{id}/rnn_training.txt'
     
+    # Results Saving
     f1 = open(results_filepath, 'a+')
     lines = f1.readlines()
     if os.path.getsize(results_filepath) == 0:

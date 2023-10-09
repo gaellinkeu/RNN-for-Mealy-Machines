@@ -1,0 +1,152 @@
+digraph fsm {
+	s_0 [root=true]
+	s_1
+	s_2
+	s_3
+	s_4
+	s_5
+	s_283
+	s_7
+	s_9
+	s_10
+	s_198
+	s_21
+	s_261
+	s_274
+	s_37
+	s_56
+	s_57
+	s_22
+	s_23
+	s_28
+	s_24
+	s_38
+	s_107
+	s_134
+	s_160
+	s_384
+	s_64
+	s_65
+	s_67
+	s_68
+	s_69
+	s_70
+	s_323
+	s_96
+	s_95
+	s_135
+	s_262
+	s_263
+	s_108
+	s_109
+	s_110
+	s_265
+	s_332
+	s_334
+	s_335
+	s_222
+	s_223
+	s_136
+	s_398
+	s_260
+	s_229
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_1 [label="b/1"]
+	s_1 -> s_2 [label="b/0"]
+	s_2 -> s_3 [label="a/0"]
+	s_3 -> s_4 [label="b/1"]
+	s_4 -> s_5 [label="a/1"]
+	s_5 -> s_283 [label="a/0"]
+	s_283 -> s_7 [label="a/0"]
+	s_7 -> s_283 [label="a/0"]
+	s_283 -> s_9 [label="b/1"]
+	s_9 -> s_10 [label="b/0"]
+	s_10 -> s_7 [label="a/0"]
+	s_4 -> s_198 [label="b/1"]
+	s_198 -> s_198 [label="b/1"]
+	s_198 -> s_5 [label="a/1"]
+	s_5 -> s_21 [label="b/1"]
+	s_21 -> s_261 [label="a/1"]
+	s_3 -> s_5 [label="a/1"]
+	s_261 -> s_274 [label="b/1"]
+	s_274 -> s_37 [label="a/0"]
+	s_37 -> s_56 [label="a/0"]
+	s_56 -> s_57 [label="a/0"]
+	s_57 -> s_56 [label="a/0"]
+	s_56 -> s_2 [label="b/0"]
+	s_21 -> s_22 [label="b/1"]
+	s_22 -> s_23 [label="a/0"]
+	s_23 -> s_283 [label="a/0"]
+	s_7 -> s_21 [label="b/1"]
+	s_2 -> s_28 [label="b/1"]
+	s_28 -> s_2 [label="b/0"]
+	s_261 -> s_24 [label="b/1"]
+	s_24 -> s_37 [label="a/0"]
+	s_37 -> s_38 [label="b/0"]
+	s_28 -> s_57 [label="a/0"]
+	s_57 -> s_38 [label="b/0"]
+	s_38 -> s_107 [label="b/1"]
+	s_107 -> s_38 [label="b/0"]
+	s_274 -> s_134 [label="b/0"]
+	s_134 -> s_160 [label="a/0"]
+	s_1 -> s_57 [label="a/0"]
+	s_38 -> s_384 [label="a/0"]
+	s_384 -> s_64 [label="b/1"]
+	s_64 -> s_65 [label="a/1"]
+	s_65 -> s_7 [label="a/0"]
+	s_7 -> s_67 [label="b/1"]
+	s_67 -> s_68 [label="b/0"]
+	s_68 -> s_69 [label="b/1"]
+	s_69 -> s_70 [label="b/1"]
+	s_70 -> s_261 [label="a/0"]
+	s_261 -> s_283 [label="a/0"]
+	s_283 -> s_323 [label="b/1"]
+	s_323 -> s_10 [label="b/1"]
+	s_65 -> s_96 [label="b/1"]
+	s_96 -> s_95 [label="b/1"]
+	s_64 -> s_95 [label="b/1"]
+	s_95 -> s_96 [label="b/1"]
+	s_95 -> s_7 [label="a/1"]
+	s_10 -> s_135 [label="b/1"]
+	s_135 -> s_65 [label="a/1"]
+	s_384 -> s_262 [label="a/1"]
+	s_262 -> s_263 [label="a/0"]
+	s_263 -> s_274 [label="b/1"]
+	s_274 -> s_107 [label="b/0"]
+	s_107 -> s_108 [label="a/0"]
+	s_108 -> s_109 [label="b/1"]
+	s_109 -> s_110 [label="b/0"]
+	s_110 -> s_263 [label="a/0"]
+	s_263 -> s_262 [label="a/0"]
+	s_262 -> s_265 [label="b/1"]
+	s_265 -> s_332 [label="a/1"]
+	s_332 -> s_67 [label="b/1"]
+	s_67 -> s_334 [label="a/0"]
+	s_334 -> s_335 [label="b/0"]
+	s_335 -> s_10 [label="b/1"]
+	s_265 -> s_96 [label="b/1"]
+	s_107 -> s_56 [label="a/0"]
+	s_0 -> s_3 [label="a/0"]
+	s_9 -> s_222 [label="a/0"]
+	s_222 -> s_223 [label="b/1"]
+	s_223 -> s_95 [label="b/1"]
+	s_222 -> s_7 [label="a/1"]
+	s_135 -> s_136 [label="b/1"]
+	s_22 -> s_323 [label="b/1"]
+	s_323 -> s_222 [label="a/0"]
+	s_23 -> s_24 [label="b/1"]
+	s_24 -> s_10 [label="b/1"]
+	s_222 -> s_96 [label="b/1"]
+	s_23 -> s_21 [label="b/1"]
+	s_134 -> s_398 [label="b/1"]
+	s_283 -> s_260 [label="b/1"]
+	s_260 -> s_261 [label="a/1"]
+	s_274 -> s_95 [label="b/0"]
+	s_136 -> s_96 [label="b/1"]
+	s_96 -> s_65 [label="a/0"]
+	s_223 -> s_65 [label="a/1"]
+	s_69 -> s_229 [label="a/1"]
+	s_229 -> s_21 [label="b/1"]
+	s_65 -> s_223 [label="b/1"]
+}

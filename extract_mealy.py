@@ -21,8 +21,8 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--id", type=int, default=0)
     parser.add_argument("--dev_length", type=int, default=1000)
-    parser.add_argument("--n_train_low", type=int, default=1)
-    parser.add_argument("--n_train_high", type=int, default=80)
+    parser.add_argument("--n_train_low", type=int, default=100)
+    parser.add_argument("--n_train_high", type=int, default=101)
     parser.add_argument("--word_dev_low", type=int, default=1)
     parser.add_argument("--word_dev_high", type=int, default=100)
     parser.add_argument("--sim_threshold", type=float, default=.99)
@@ -175,23 +175,20 @@ if __name__ == "__main__" :
 
         #n_train = range(2,5)
 
-
+        sim_threshold = args.sim_threshold
         os.makedirs(f"./Results",exist_ok=True)
-        os.makedirs(f"./Results/{id}",exist_ok=True)
-        info_filepath = f'./Results/{id}/main.txt'
+        info_filepath = f'./Results/main.txt'
 
         f1 = open(info_filepath, 'a+')
         lines = f1.readlines()
         if os.path.getsize(info_filepath) == 0:
-            f1.write('ID,Time,data,Final_acc,Final_dev_acc,initial_train_acc,initial_dev_acc,all_merges,correct_merges,state_set_size,equivalence\n')
+            f1.write('ID,Time,data,sim_threshold,Final_acc,Final_dev_acc,initial_train_acc,initial_dev_acc,all_merges,correct_merges,state_set_size,equivalence\n')
 
     
         init_train_acc[seed], init_dev_acc[seed], train_acc[seed], dev_acc[seed] = [], [], [], []
         state_set_size[seed] = []
         for n in n_train:
-            print()
-
-            sim_threshold = args.sim_threshold
+            print(f'We train the      {n}       data')
 
             """dev_corpus = corpus[split_index:]
             dev_labels = labels[split_index:]
@@ -295,26 +292,26 @@ if __name__ == "__main__" :
     
             print('\--> Minimization stage... Done\n')
 
-            if merged_fsm.is_output_deterministic():
-                MM_extracted_filepath = f'./FSMs_visuals/fsm{id}_{args.sim_threshold}_first_extracted.dot'
-                f = open(MM_extracted_filepath, "w")
-                f.write(merged_fsm.toDot())
-                f.close()
-                isd, st = merged_fsm.is_state_deterministic()
-                if not isd:
-                    s = [list(x.values()) for x in st]
-                    #print(s)
-                    merged_fsm.final_merges(s)
-                if merged_fsm.determinize():
-                    #if merged_fsm.is_complete():
-                    merged_fsm.minimize()
+            # if merged_fsm.is_output_deterministic():
+            #     MM_extracted_filepath = f'./FSMs_visuals/fsm{id}_{args.sim_threshold}_first_extracted.dot'
+            #     f = open(MM_extracted_filepath, "w")
+            #     f.write(merged_fsm.toDot())
+            #     f.close()
+            #     isd, st = merged_fsm.is_state_deterministic()
+            #     if not isd:
+            #         s = [list(x.values()) for x in st]
+            #         #print(s)
+            #         merged_fsm.final_merges(s)
+            #     if merged_fsm.determinize():
+            #         #if merged_fsm.is_complete():
+            #         merged_fsm.minimize()
             
             merged_fsm.save(f"./FSMs_extracted", sim_threshold)
             merged_fsm.print(print_all=True)
             print('\--> Merged FSM saved stage... Done\n')
             
             f1.write(f'{id},{seed},')
-            f1.write(f'{n},')
+            f1.write(f'{n},{sim_threshold},')
             # Evaluate performance
             _acc = score_all_prefixes(merged_fsm, corpus, labels)
             train_acc[seed].append(_acc)
@@ -339,11 +336,9 @@ if __name__ == "__main__" :
             f1.write(f'{equivalence}\n')
 
     f1.close()      
-    create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_train, args.id, sim_threshold, args.epoch, args.eval)
-    print('\--> Plot saving stage... Done\n')
+    # create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_train, args.id, sim_threshold, args.epoch, args.eval)
+    # print('\--> Plot saving stage... Done\n')
     
-    
-        
 
 
     # Checking the equivalence between the expected and the obtained machine

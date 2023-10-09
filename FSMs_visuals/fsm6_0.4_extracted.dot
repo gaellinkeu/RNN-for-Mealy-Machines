@@ -1,0 +1,55 @@
+digraph fsm {
+	s_0 [root=true]
+	s_202
+	s_2
+	s_3
+	s_4
+	s_5
+	s_61
+	s_74
+	s_247
+	s_62
+	s_63
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_202 [label="b/1"]
+	s_202 -> s_2 [label="b/0"]
+	s_2 -> s_3 [label="a/0"]
+	s_3 -> s_4 [label="b/1"]
+	s_4 -> s_5 [label="a/1"]
+	s_5 -> s_5 [label="a/0"]
+	s_5 -> s_202 [label="b/1"]
+	s_4 -> s_4 [label="b/1"]
+	s_5 -> s_4 [label="b/1"]
+	s_3 -> s_5 [label="a/1"]
+	s_202 -> s_61 [label="a/0"]
+	s_61 -> s_74 [label="a/0"]
+	s_74 -> s_61 [label="a/0"]
+	s_74 -> s_2 [label="b/0"]
+	s_4 -> s_247 [label="b/1"]
+	s_247 -> s_5 [label="a/0"]
+	s_2 -> s_202 [label="b/1"]
+	s_61 -> s_62 [label="b/0"]
+	s_2 -> s_4 [label="b/1"]
+	s_62 -> s_61 [label="b/1"]
+	s_202 -> s_0 [label="a/0"]
+	s_0 -> s_74 [label="a/0"]
+	s_62 -> s_63 [label="a/0"]
+	s_63 -> s_4 [label="b/1"]
+	s_2 -> s_62 [label="b/1"]
+	s_62 -> s_2 [label="b/1"]
+	s_2 -> s_5 [label="a/0"]
+	s_63 -> s_62 [label="a/1"]
+	s_62 -> s_5 [label="a/0"]
+	s_3 -> s_61 [label="b/1"]
+	s_62 -> s_4 [label="b/1"]
+	s_74 -> s_0 [label="a/0"]
+	s_0 -> s_3 [label="a/0"]
+	s_202 -> s_63 [label="a/0"]
+	s_247 -> s_202 [label="b/1"]
+	s_0 -> s_2 [label="b/1"]
+	s_247 -> s_2 [label="b/1"]
+	s_5 -> s_2 [label="b/1"]
+	s_0 -> s_4 [label="b/1"]
+	s_5 -> s_3 [label="a/0"]
+}

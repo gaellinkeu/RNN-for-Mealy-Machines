@@ -1,4 +1,5 @@
 # author : Omer Nguena Timo
+# Modified: Gaël LINKEU
 # version : v0
 # use : research only
 
@@ -10,7 +11,7 @@ import argparse
 from utils import randomWord
 from defined_machines import *
 
-
+# We save the datase
 def datasetSaving(id, inputs, outputs):
     assert len(inputs) == len(outputs), 'The inputs set and output sets don\'t have the same length'
     os.makedirs(f"./datasets", exist_ok=True)
@@ -19,7 +20,7 @@ def datasetSaving(id, inputs, outputs):
         f.write(f'{inputs[i]},{outputs[i]}\n')
     f.close()
 
-
+# Random generation of a new Mealy Machine
 def fsmRandomGenInputComplete(nbStates=2,inputAlphabet =['a','b'], outputAlphabet =['0','1']) -> FSM :
     fsm = FSM()
     maxNbTransition = nbStates *  len(inputAlphabet)
@@ -41,15 +42,15 @@ def fsmRandomGenInputComplete(nbStates=2,inputAlphabet =['a','b'], outputAlphabe
     return fsm  
     
 
-
+# Parameters initialization
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--id", type=int, default=-1)
     parser.add_argument("--train_length", type=int, default=10000)
     parser.add_argument("--n_train_low", type=int, default=1)
     parser.add_argument("--n_train_high", type=int, default=15)
-    parser.add_argument("--n_states", type=int, default=2)
-    parser.add_argument("--static", type=int, default=1)
+    parser.add_argument("--n_states", type=int, default=None)
+    parser.add_argument("--static", type=int, default=0)
     return parser.parse_args()
 
 
@@ -66,11 +67,18 @@ if __name__ == '__main__' :
     N = args.train_length
     max_length = args.n_train_high
     min_length = args.n_train_low
-    n_states = args.n_states
+    if args.n_states == None:
+        # The number of state should be twice(the length of our alphabet)
+        # the id of the machine
+        n_states = id+2
+    else:
+        n_states = args.n_states
     
     if not args.static:
+        # Random generation
         fsm = fsmRandomGenInputComplete(n_states)
     else:
+        # We get predefined Mealy Machine
         if id == 0:
             fsm = buildExampleFsm0()
         if id == 1:
@@ -98,20 +106,13 @@ if __name__ == '__main__' :
     inputs_set = []
     outputs_set = []
 
+    # we generate the main dataset
     for _ in range(N):
         word = randomWord(min_length, max_length, fsm._inputSet)
         inputs_set.append(word)
         outputs_set.append(fsm.produceOutput(word))
         #print(f"{word} => {fsm.produceOutput(word)}\n")
+
     datasetSaving(id, inputs_set, outputs_set)
     fsm.print()
     fsm.save(id)
-
-    """
-    for k in range(1, 2):
-        nbState = random.randrange(6,15)
-        fsm = fsmRandomGenInputComplete(nbState)
-        os.makedirs(f"./data/exemple{k}",exist_ok=True)
-        f = open(f"./data/exemple{k}/fsm.dot", "w")
-        f.write(fsm.toDot())
-        f.close()"""

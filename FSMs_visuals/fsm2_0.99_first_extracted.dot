@@ -1,0 +1,46 @@
+digraph fsm {
+	s_0 [root=true]
+	s_1
+	s_108
+	s_353
+	s_354
+	s_5
+	s_110
+	s_370
+	s_54
+	s_12
+	s_104
+	s_369
+	s_319
+	s_351
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_1 [label="a/1"]
+	s_1 -> s_108 [label="a/0"]
+	s_108 -> s_353 [label="b/0"]
+	s_353 -> s_354 [label="a/0"]
+	s_354 -> s_5 [label="a/0"]
+	s_5 -> s_5 [label="a/0"]
+	s_5 -> s_353 [label="b/0"]
+	s_353 -> s_110 [label="b/0"]
+	s_110 -> s_370 [label="b/0"]
+	s_370 -> s_54 [label="b/0"]
+	s_354 -> s_353 [label="b/0"]
+	s_110 -> s_12 [label="a/1"]
+	s_12 -> s_108 [label="a/0"]
+	s_370 -> s_104 [label="a/1"]
+	s_104 -> s_108 [label="a/0"]
+	s_108 -> s_5 [label="a/0"]
+	s_54 -> s_54 [label="b/0"]
+	s_54 -> s_104 [label="a/1"]
+	s_104 -> s_369 [label="b/0"]
+	s_369 -> s_370 [label="b/0"]
+	s_12 -> s_319 [label="b/0"]
+	s_319 -> s_351 [label="a/1"]
+	s_351 -> s_369 [label="b/0"]
+	s_319 -> s_110 [label="b/0"]
+	s_1 -> s_369 [label="b/0"]
+	s_369 -> s_351 [label="a/1"]
+	s_351 -> s_108 [label="a/0"]
+	s_0 -> s_370 [label="b/0"]
+}

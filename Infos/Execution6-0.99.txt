@@ -1,0 +1,133 @@
+
+
+The ID: 6
+The times: 0
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 1
+The amount of all merging: 235
+The amount of correct merging: 212
+The size of expected states set: 8
+The size of obtained states set: 5
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 1
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 1
+The amount of all merging: 308
+The amount of correct merging: 292
+The size of expected states set: 8
+The size of obtained states set: 6
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 2
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 1
+The amount of all merging: 290
+The amount of correct merging: 269
+The size of expected states set: 8
+The size of obtained states set: 6
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 4
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 0
+The amount of all merging: 266
+The amount of correct merging: 253
+The size of expected states set: 8
+The size of obtained states set: 5
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 5
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 1
+The amount of all merging: 344
+The amount of correct merging: 319
+The size of expected states set: 8
+The size of obtained states set: 7
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 6
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 1
+The amount of all merging: 305
+The amount of correct merging: 279
+The size of expected states set: 8
+The size of obtained states set: 6
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 7
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 0
+The amount of all merging: 234
+The amount of correct merging: 201
+The size of expected states set: 8
+The size of obtained states set: 6
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 8
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 0
+The amount of all merging: 263
+The amount of correct merging: 240
+The size of expected states set: 8
+The size of obtained states set: 5
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 9
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 1
+The amount of all merging: 275
+The amount of correct merging: 239
+The size of expected states set: 8
+The size of obtained states set: 8
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 10
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 1
+The amount of all merging: 294
+The amount of correct merging: 271
+The size of expected states set: 8
+The size of obtained states set: 5
+The size of te dev set: 1000
+The max length of a dev word: 100
+
+The ID: 6
+The times: 1
+Concerning Final FSM
+The similarity threshold: 0.99
+The equivalence decision: 1
+The amount of all merging: 301
+The amount of correct merging: 276
+The size of expected states set: 8
+The size of obtained states set: 4
+The size of te dev set: 1000
+The max length of a dev word: 100

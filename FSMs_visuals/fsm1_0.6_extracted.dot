@@ -1,22 +1,24 @@
 digraph fsm {
-	s_318 [root=true]
-	s_83
-	s_204
-	s_317
-	s_296
-	s_257
+	s_0 [root=true]
+	s_1
+	s_2
+	s_3
+	s_95
+	s_16
 	qi [shape = point]
-	qi -> s_318
-	s_318 -> s_83 [label="b/1"]
-	s_83 -> s_204 [label="b/0"]
-	s_204 -> s_317 [label="b/0"]
-	s_317 -> s_318 [label="a/0"]
-	s_318 -> s_318 [label="a/0"]
-	s_83 -> s_296 [label="a/1"]
-	s_296 -> s_204 [label="b/0"]
-	s_204 -> s_296 [label="a/1"]
-	s_296 -> s_296 [label="a/1"]
-	s_317 -> s_257 [label="b/1"]
-	s_257 -> s_204 [label="b/0"]
-	s_257 -> s_296 [label="a/1"]
+	qi -> s_0
+	s_0 -> s_1 [label="a/1"]
+	s_1 -> s_2 [label="a/0"]
+	s_2 -> s_3 [label="b/0"]
+	s_3 -> s_0 [label="b/0"]
+	s_1 -> s_0 [label="b/0"]
+	s_0 -> s_0 [label="b/0"]
+	s_3 -> s_95 [label="a/0"]
+	s_95 -> s_3 [label="b/0"]
+	s_2 -> s_16 [label="a/1"]
+	s_16 -> s_3 [label="b/0"]
+	s_95 -> s_16 [label="a/1"]
+	s_16 -> s_16 [label="a/1"]
+	s_95 -> s_0 [label="b/0"]
+	s_16 -> s_0 [label="b/0"]
 }
