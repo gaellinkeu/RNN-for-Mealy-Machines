@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ID,Time,Train_set_size,Test_set_size,convergence_epoch,training_acc,testing_acc
 1,1,8000,2000,3,100.0,100.0
 1,2,8000,2000,4,100.0,100.0
@@ -10,3 +11,9 @@ ID,Time,Train_set_size,Test_set_size,convergence_epoch,training_acc,testing_acc
 1,10,8000,2000,3,100.0,100.0
 1,1,8000,2000,3,100.0,100.0
 1,0,8000,2000,3,100.0,100.0
+=======
+ID,Train_set_size,Test_set_size,convergence_epoch,training_acc,testing_acc
+1,8000,2000,4,100.0,100.0
+1,0,8000,2000,4,100.0,100.0
+1,0,8000,2000,4,100.0,100.0
+>>>>>>> 724c0f2f4b204204cd7d2af960e00cb6b0388921

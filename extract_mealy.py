@@ -28,7 +28,7 @@ def parse_args():
     parser.add_argument("--sim_threshold", type=float, default=.99)
     parser.add_argument("--find_threshold", default=False, action=argparse.BooleanOptionalAction)
     parser.add_argument("--similarity_effect", type=int, default=0)
-    parser.add_argument("--seeds", type=int, default=1)
+    parser.add_argument("--seeds", type=int, default=10)
     parser.add_argument("--hidden_size", type=float, default=10)
     parser.add_argument('--eval', type=str, default="labels")
     parser.add_argument('--epoch', type=str, default="best")    
@@ -199,8 +199,8 @@ if __name__ == "__main__" :
             #corpus, labels, val_corpus, val_labels = train_test_split(corpus, labels, n)
             val_corpus = corpus[n:2*n]
             val_labels = labels[n:2*n]
-            corpus = corpus[:n]
-            labels = labels[:n]
+            corpus = corpus[-n:]
+            labels = labels[-n:]
 
             max_length_corpus = len(max(corpus, key=len))
 

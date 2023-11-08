@@ -37,13 +37,13 @@ def threshold_study():
                 os.system(f'python extract_mealy.py --id={id} --sim_threshold={sim_threshold}')
 
 if __name__ == "__main__":
-    # args = parse_args()
+    args = parse_args()
 
-    # n_machines = args.n_machines
-    # for j in range(1):
-    #     for i in range(n_machines):
-    #         os.system(f'python fsm_initialization.py --id={i} --n_states={i+2}')
-    #         os.system(f'python train_rnn.py --id={i} --times={j+1}')
-    #         os.system(f'python extract_mealy.py --id={i} --times={j+1}')
+    n_machines = args.n_machines
+    for j in range(1):
+        for i in range(n_machines):
+            os.system(f'python fsm_initialization.py --id={i} --n_states={i+2}')
+            os.system(f'python train_rnn.py --id={i} --times={j+1}')
+            os.system(f'python extract_mealy.py --id={i} --times={j+1}')
 
     threshold_study()

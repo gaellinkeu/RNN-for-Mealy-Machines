@@ -3,8 +3,15 @@ digraph fsm {
 	s_1
 	qi [shape = point]
 	qi -> s_0
+<<<<<<< HEAD
 	s_0 -> s_1 [label="a/1"]
 	s_1 -> s_0 [label="a/0"]
 	s_0 -> s_1 [label="b/1"]
 	s_1 -> s_0 [label="b/0"]
+=======
+	s_0 -> s_0 [label="b/1"]
+	s_0 -> s_1 [label="a/1"]
+	s_1 -> s_0 [label="b/0"]
+	s_1 -> s_1 [label="a/0"]
+>>>>>>> 724c0f2f4b204204cd7d2af960e00cb6b0388921
 }

@@ -1,5 +1,6 @@
 digraph fsm {
 	s_0 [root=true]
+<<<<<<< HEAD
 	s_188
 	s_189
 	qi [shape = point]
@@ -10,4 +11,40 @@ digraph fsm {
 	s_189 -> s_188 [label="a/1"]
 	s_188 -> s_189 [label="b/0"]
 	s_0 -> s_188 [label="b/1"]
+=======
+	s_1
+	s_207
+	s_228
+	s_208
+	s_6
+	s_7
+	s_209
+	s_12
+	s_243
+	s_67
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_1 [label="b/1"]
+	s_1 -> s_207 [label="a/1"]
+	s_207 -> s_228 [label="b/0"]
+	s_228 -> s_207 [label="a/1"]
+	s_207 -> s_208 [label="a/0"]
+	s_208 -> s_6 [label="a/0"]
+	s_6 -> s_7 [label="b/0"]
+	s_7 -> s_207 [label="a/1"]
+	s_208 -> s_209 [label="b/0"]
+	s_209 -> s_12 [label="b/1"]
+	s_228 -> s_243 [label="b/1"]
+	s_243 -> s_207 [label="a/1"]
+	s_243 -> s_67 [label="b/1"]
+	s_67 -> s_67 [label="b/1"]
+	s_67 -> s_207 [label="a/1"]
+	s_6 -> s_6 [label="a/0"]
+	s_209 -> s_207 [label="a/1"]
+	s_7 -> s_12 [label="b/1"]
+	s_12 -> s_207 [label="a/1"]
+	s_1 -> s_67 [label="b/1"]
+	s_0 -> s_207 [label="a/1"]
+	s_12 -> s_67 [label="b/1"]
+>>>>>>> 724c0f2f4b204204cd7d2af960e00cb6b0388921
 }

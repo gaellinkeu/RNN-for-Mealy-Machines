@@ -10,6 +10,7 @@ The amount of correct merging: 264
 The size of expected states set: 3
 The size of obtained states set: 3
 The size of te dev set: 1000
+<<<<<<< HEAD
 The max length of a dev word: 100
 
 The ID: 1
@@ -130,4 +131,6 @@ The amount of correct merging: 323
 The size of expected states set: 3
 The size of obtained states set: 3
 The size of te dev set: 1000
+=======
+>>>>>>> 724c0f2f4b204204cd7d2af960e00cb6b0388921
 The max length of a dev word: 100

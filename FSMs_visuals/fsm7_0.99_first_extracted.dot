@@ -1,12 +1,17 @@
 digraph fsm {
 	s_0 [root=true]
+<<<<<<< HEAD
 	s_1
+=======
+	s_136
+>>>>>>> 724c0f2f4b204204cd7d2af960e00cb6b0388921
 	s_2
 	s_3
 	s_4
 	s_5
 	s_6
 	s_7
+<<<<<<< HEAD
 	s_8
 	s_9
 	s_10
@@ -232,4 +237,99 @@ digraph fsm {
 	s_106 -> s_107 [label="b/1"]
 	s_107 -> s_5 [label="a/0"]
 	s_32 -> s_16 [label="b/0"]
+=======
+	s_157
+	s_158
+	s_170
+	s_135
+	s_22
+	s_26
+	s_27
+	s_178
+	s_179
+	s_180
+	s_148
+	s_10
+	s_21
+	s_197
+	s_11
+	s_48
+	s_12
+	s_28
+	s_13
+	s_14
+	s_90
+	s_91
+	s_63
+	s_64
+	s_112
+	s_65
+	s_66
+	qi [shape = point]
+	qi -> s_0
+	s_0 -> s_136 [label="a/0"]
+	s_136 -> s_2 [label="b/1"]
+	s_2 -> s_3 [label="b/0"]
+	s_3 -> s_4 [label="b/1"]
+	s_4 -> s_5 [label="a/1"]
+	s_5 -> s_6 [label="b/1"]
+	s_6 -> s_7 [label="b/0"]
+	s_7 -> s_4 [label="b/1"]
+	s_6 -> s_157 [label="a/1"]
+	s_157 -> s_158 [label="a/0"]
+	s_5 -> s_170 [label="a/0"]
+	s_170 -> s_135 [label="b/1"]
+	s_135 -> s_22 [label="b/0"]
+	s_22 -> s_6 [label="b/1"]
+	s_158 -> s_26 [label="a/1"]
+	s_170 -> s_26 [label="a/1"]
+	s_26 -> s_27 [label="b/0"]
+	s_27 -> s_4 [label="b/1"]
+	s_4 -> s_7 [label="b/0"]
+	s_26 -> s_178 [label="a/0"]
+	s_178 -> s_179 [label="b/1"]
+	s_179 -> s_180 [label="a/0"]
+	s_180 -> s_148 [label="a/1"]
+	s_7 -> s_10 [label="a/0"]
+	s_10 -> s_21 [label="b/1"]
+	s_21 -> s_136 [label="a/0"]
+	s_136 -> s_148 [label="a/1"]
+	s_148 -> s_197 [label="b/1"]
+	s_197 -> s_22 [label="b/0"]
+	s_10 -> s_11 [label="a/1"]
+	s_11 -> s_48 [label="a/0"]
+	s_48 -> s_2 [label="b/1"]
+	s_3 -> s_10 [label="a/0"]
+	s_11 -> s_12 [label="b/0"]
+	s_21 -> s_22 [label="b/0"]
+	s_27 -> s_28 [label="a/0"]
+	s_28 -> s_21 [label="b/1"]
+	s_2 -> s_13 [label="a/0"]
+	s_13 -> s_14 [label="b/1"]
+	s_14 -> s_3 [label="b/0"]
+	s_13 -> s_90 [label="a/1"]
+	s_90 -> s_91 [label="a/1"]
+	s_91 -> s_3 [label="b/0"]
+	s_91 -> s_48 [label="a/0"]
+	s_48 -> s_148 [label="a/1"]
+	s_90 -> s_197 [label="b/1"]
+	s_197 -> s_63 [label="a/0"]
+	s_63 -> s_64 [label="a/1"]
+	s_64 -> s_197 [label="b/1"]
+	s_148 -> s_112 [label="a/1"]
+	s_112 -> s_48 [label="a/0"]
+	s_64 -> s_65 [label="a/1"]
+	s_65 -> s_66 [label="b/0"]
+	s_66 -> s_4 [label="b/1"]
+	s_112 -> s_3 [label="b/0"]
+	s_158 -> s_135 [label="b/1"]
+	s_135 -> s_136 [label="a/0"]
+	s_22 -> s_10 [label="a/0"]
+	s_0 -> s_12 [label="b/0"]
+	s_12 -> s_4 [label="b/1"]
+	s_65 -> s_48 [label="a/0"]
+	s_12 -> s_10 [label="a/0"]
+	s_14 -> s_13 [label="a/0"]
+	s_157 -> s_6 [label="b/1"]
+>>>>>>> 724c0f2f4b204204cd7d2af960e00cb6b0388921
 }
