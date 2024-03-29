@@ -46,7 +46,7 @@ def cosine_merging(fsm, states, threshold):
                 
     
     fsm_.removeDuplicate()
-    fsm_.id = str(fsm_.id) + 'min'
+    fsm_.id = str(fsm_.id) + '_final'
     return fsm_, all_merges, correct_merges
 
 def cross_validate(left, right, fsm, states, states_mask, val_sents, val_gold):

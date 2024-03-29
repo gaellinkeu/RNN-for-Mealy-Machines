@@ -345,10 +345,10 @@ class Mealy(object):
             filepath=type
         os.makedirs(f'./{filepath}',exist_ok=True)
         if extra != None:
-            f1 = open(f'{filepath}/{type}{self.id}_{extra}.txt', "w")
+            f1 = open(f'{filepath}/{type}{self.id}_{extra}_extracted.txt', "w")
             f2 = open(f'FSMs_visuals/{type}{self.id}_{extra}_extracted.dot', "w")
         else:
-            f1 = open(f"{filepath}/{type}{self.id}.txt", "w")
+            f1 = open(f"{filepath}/{type}{self.id}_extracted.txt", "w")
             f2 = open(f'FSMs_visuals/{type}{self.id}_extracted.dot', "w")
 
 

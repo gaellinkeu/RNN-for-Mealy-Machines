@@ -118,7 +118,7 @@ class FSM :
 
    def save(self, id=0):
       os.makedirs(f"./FSMs",exist_ok=True)
-      f1 = open(f"./FSMs/fsm{id}.txt", "w")
+      f1 = open(f"./FSMs/FSM{id}.txt", "w")
       f1.write(f'{id}\n')
 
       states = []

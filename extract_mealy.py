@@ -197,17 +197,17 @@ if __name__ == "__main__" :
             
 
             # Evaluate performance
-            _acc = score_all_prefixes(merged_fsm, inputs, outputs)
-            train_acc[seed].append(_acc)
-
-            _dev_acc = score_whole_words(merged_fsm, dev_inputs, dev_outputs)
-            dev_acc[seed].append(_dev_acc)
-
             _init_acc = score_all_prefixes(init_fsm, inputs, outputs, 'tree')
             init_train_acc[seed].append(_init_acc)
 
             _init_dev_acc = score_whole_words(init_fsm, dev_inputs, dev_outputs, 'tree') 
             init_dev_acc[seed].append(_init_dev_acc)
+
+            _acc = score_all_prefixes(merged_fsm, inputs, outputs)
+            train_acc[seed].append(_acc)
+
+            _dev_acc = score_whole_words(merged_fsm, dev_inputs, dev_outputs)
+            dev_acc[seed].append(_dev_acc)
 
             state_set_size[seed].append(len(merged_fsm.states))
 
@@ -236,4 +236,4 @@ if __name__ == "__main__" :
     report_filepath = f'./Reports/Execution{id}-{args.sim_threshold}.txt'
     save_final_report(report_filepath, id, args.times, args.sim_threshold, equivalence, all_merges, correct_merges, len(expected_fsm.states), len(merged_fsm.states), len(dev_inputs), args.word_dev_high)
 
-    merged_fsm.save()
+    merged_fsm.save(filepath='FSMs')
