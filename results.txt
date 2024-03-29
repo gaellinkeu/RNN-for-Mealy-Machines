@@ -1,1 +1,0 @@
-id,train_size,test_size,epoch_convergence,train_acc,test_acc,dev_size,tree_dataset_size,sim_threshold,all_merges,correct_merges, expected_state_size,obtained_states_size,equivalent,dev_acc

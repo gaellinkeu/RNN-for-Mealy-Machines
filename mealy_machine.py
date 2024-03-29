@@ -1,6 +1,7 @@
 import os
 import sys
 from copy import deepcopy
+from mealy_trie import Trie
 
 
 def get_index(states, state):
@@ -9,11 +10,17 @@ def get_index(states, state):
             return i
     return len(states)
 
-def allzeros(list_):
-    for x in list_:
+def is_full_zeros(List):
+    for x in List:
         if x != 0:
             return False
     return True
+
+def build_trie_from_dict(id, dict, labels, nfa=False):
+    t = Trie(dict, labels)
+    my_mealy = Mealy(id, t.root.id, t.states, t.arcs)
+    # states are represented in a dfs fashion
+    return my_mealy
 
 class Mealy(object):
 
@@ -58,7 +65,6 @@ class Mealy(object):
         idx = self.root
         for i in range(len(word)):
            if self.output(idx, word[i]) == None:
-            #print(f'There\'s no transitions from {idx} with {word[i]}')
             break
            output += self.output(idx, word[i])[0]
            idx = self.output(idx, word[i])[1]
@@ -72,7 +78,6 @@ class Mealy(object):
         idx = [self.root]
         for i in range(len(word)):
            if self.output(idx[i], word[i]) == None:
-            #print(f'There\'s no transitions from {idx[i]} with {word[i]}')
             break
            idx.append(self.output(idx[i], word[i])[1])
         return idx
@@ -82,9 +87,6 @@ class Mealy(object):
         print("\n********************* The extracted Mealy Machine *********************\n")
         print(f'-- The initial state is {self.root}')
         print(f'-- The amount of states is {len(self.states)}')
-        #print("Different states of the Tree: ")
-        #for i in self.states:
-        #    print(f'ID: {i}\tHidden value: {0}')
         num_transitions = 10
         if print_all:
             num_transitions = len(self.transitions)
@@ -97,7 +99,7 @@ class Mealy(object):
         for i, transition in enumerate(self.transitions[:num_transitions]):
             print(f'-> {transition[0]} --> {transition[1]}/{transition[2]} --> {transition[3]}')
 
-    # Delete double transition or states          
+    # Delete duplicated transitions or states          
     def removeDuplicate(self):
         add = True
         states = []
@@ -134,7 +136,6 @@ class Mealy(object):
         all_merge, correct_merge = self.merging(state1, state2, similarity_matrix)
         self.removeDuplicate()
         self.states_to_merge.clear()
-        #self.print()
         return all_merge, correct_merge
 
     # Merging operation
@@ -163,15 +164,11 @@ class Mealy(object):
             for j in range(len(self.transitions)):
                 if self.transitions[i][0] == state1 and self.transitions[j][0] == state2:
                     if self.transitions[i][1] == self.transitions[j][1] and self.transitions[i][2] != self.transitions[j][2]:
-                        #(f'\n{i}')
-                        #print(self.transitions[i])
-                        #print(self.transitions[j])
-                        #print(f'{j}\n')
                         non_determinism = True
                         break
 
         if non_determinism:
-            print('Cette Machine n\'est pas déterministe\n')
+            print('This fsm is not deterministic\n')
             return 0, 0
         
         correct_sub = 0
@@ -191,9 +188,7 @@ class Mealy(object):
                     if self.transitions[i][1:3] == self.transitions[j][1:3]:
                         if self.transitions[i][3] in (state1, state2) and self.transitions[j][3] in (state1, state2):
                            pass
-                        else:
-                            #print(f'\n The two SUB states are {self.transitions[i][3]} and {self.transitions[j][3]}\n')
-                            
+                        else:                            
                             x, y = self.merging(self.transitions[i][3], self.transitions[j][3], similarity_matrix, False)
                             res += x
                             correct_sub += y
@@ -222,19 +217,11 @@ class Mealy(object):
             for i in range(len(transitions)):
                 for j in range(i):
                     if transitions[i][:3] == transitions[j][:3]:
-                        #print(f'{transitions[i][0]}')
                         _continue = True
-                        #print(f'First transition {transitions[i]}')
-                        #print(f'Second transition {transitions[j]}')
-                        #print(f'States {self.states}')
                         if transitions[i][3] in self.states and transitions[j][3] in self.states:
-                            #print(f'{transitions[i][3]}\t{transitions[j][3]}')
                             merge_amount, _ = self.merge_states(transitions[i][3], transitions[j][3])
                             if merge_amount == 0:
                                 return False
-                                
-                        #print(self.states)
-                        #self.print()
         return True
 
     def minimize(self):
@@ -247,7 +234,6 @@ class Mealy(object):
             for j in range(len(states)):
                 if j <= i:
                     continue
-                #print(f'{states[i]}\t{states[j]}')
                 check = {}
                 notequiv = False
                 for p in range(len(transitions)):
@@ -270,22 +256,12 @@ class Mealy(object):
                 if notequiv:
                     min_states[i].append(0)
                 else:
-                    #print(check)
-                    #{'b': {'1': [194, 83]}, 'a': {'0': [318, 318]}}
-                    # if one state has less than two 2 transitions(one for b and one ofr a)
-                    #print(check)
                     for (p, q) in list(check.items()):
                         if len(list(q.values())[0]) < len(self.inputAlphabet):
                             check[p][list(q.keys())[0]] = check[p][list(q.keys())[0]]*len(self.inputAlphabet)
                     
                     values = list(check.values())
                    
-                    # if len(check) == 1:
-                    #     key = list(check.keys())[0]
-                    #     for x in transitions:
-                    #         if x[0] in (self.states[i], self.states[j]) and x[1] !=key:
-                    #             d = {f'{x[2]}': [states.index(x[3])]*len(self.inputAlphabet)}
-                    #             values += [d]
                     min_states[i] += [[list(x.values())[0] for x in values]]
         #min_states = deepcopy(min_states1)
         still_check = True
@@ -309,15 +285,12 @@ class Mealy(object):
         macro_states = [] # states = [[0,3,4],[1,6],[5]]
         one_last_state = True
         for i in range(len(min_states)):
-            if allzeros(min_states[i]) and get_index(macro_states, i) == len(macro_states):
+            if is_full_zeros(min_states[i]) and get_index(macro_states, i) == len(macro_states):
                 macro_states.append([i])
-                # print(macro_states)
                 continue
             for j in range(len(min_states[i])):
-                # print('Equivalent')
                 if type(min_states[i][j]) == list:
                     if len(min_states[i][j]) < len(self.inputAlphabet):
-                        # print("\n\n I'm here \n\n")
                         continue
                     # Check if the last state (j) is mergeable with another state (i)
                     if j+i+1 == len(states)-1:
@@ -327,19 +300,10 @@ class Mealy(object):
                     idx = get_index(macro_states, i)
                     if idx == len(macro_states):
                         macro_states.append([i])
-                        # print(macro_states)
                     if get_index(macro_states, j+i+1) != len(macro_states):
                         continue
                     if j+i+1 not in macro_states[idx]:
                         macro_states[idx].append(j+i+1)
-                        # print(macro_states)
-
-        # for i in range(len(macro_states)):
-        #     print(f'\n{i}\n')
-        #     rer = []
-        #     for x in macro_states[i]:
-        #         rer.append(self.states[x])
-        #     print(f'{rer}\n')
 
         if one_last_state:
             macro_states.append([len(states)-1])
@@ -358,7 +322,6 @@ class Mealy(object):
         self.root = new_root
         self.states = new_states
         self.transitions = new_transitions
-        #self = Mealy(self.id, new_root, new_states, new_transitions)
      
     def toDot(self):
         rst = 'digraph fsm {'
@@ -377,16 +340,25 @@ class Mealy(object):
         rst += '\n}'
         return rst 
     
-    def save(self, filepath, extra=None):
-        os.makedirs(filepath,exist_ok=True)
+    def save(self, filepath = None, type = 'FSMs',extra=None):
+        if filepath == None:
+            filepath=type
+        os.makedirs(f'./{filepath}',exist_ok=True)
         if extra != None:
-            f1 = open(filepath + f"/fsm{self.id}_{extra}.txt", "w")
+            f1 = open(f'{filepath}/{type}{self.id}_{extra}.txt', "w")
+            f2 = open(f'FSMs_visuals/{type}{self.id}_{extra}_extracted.dot', "w")
         else:
-            f1 = open(filepath + f"/fsm{self.id}.txt", "w")
+            f1 = open(f"{filepath}/{type}{self.id}.txt", "w")
+            f2 = open(f'FSMs_visuals/{type}{self.id}_extracted.dot', "w")
+
 
         f1.write(f'{self.id}\n')
         f1.write(f'{self.states}\n')
         f1.write(f'{self.transitions}\n')
+        f1.close()
+
+        f2.write(self.toDot())
+        f2.close()
 
     def is_output_deterministic(self):
         # We check if every couple (inp_state, inp) corresponds to
@@ -408,7 +380,6 @@ class Mealy(object):
             st.append(dict())
 
         for i in range(len(self.transitions)):
-            #print(self.transitions[i])
             idx = self.states.index(self.transitions[i][0])
             if self.transitions[i][1] not in list(st[idx].keys()):
                 st[idx][self.transitions[i][1]] = []
@@ -416,7 +387,6 @@ class Mealy(object):
                 ISD = False
             if self.transitions[i][3] not in st[idx][self.transitions[i][1]]:
                 st[idx][self.transitions[i][1]].append(self.transitions[i][3])
-            #print(st)
         return ISD, st
 
     def is_complete(self):
@@ -440,11 +410,9 @@ class Mealy(object):
         #states_to_merges = [[[0,1,2], [3, 0, 1]],[[2]]]
         already_merged = []
         for y in states_to_merges:
-            #print(y)
             for x in y:
                 if len(x) == len(self.inputAlphabet):
                     if (x[0], x[1]) not in already_merged and (x[1], x[0]) not in already_merged:
-                        #print((x[0], x[1]))
                         merge_amount, _ = self.merge_states(x[0], x[1])
                         if merge_amount == 0:
                             return False
@@ -453,7 +421,6 @@ class Mealy(object):
                     first = x[0]
                     for i in range(len(x)-1):
                         if (first, x[i+1]) not in already_merged and (x[i+1], first) not in already_merged:
-                            #print((first, x[i+1]))
                             merge_amount, _ = self.merge_states(first, x[i+1])
                             if merge_amount == 0:
                                 return False

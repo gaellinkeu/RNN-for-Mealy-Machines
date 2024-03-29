@@ -1,7 +1,0 @@
-digraph fsm {
-	s_0 [root=true]
-	qi [shape = point]
-	qi -> s_0
-	s_0 -> s_0 [label="a/0"]
-	s_0 -> s_0 [label="b/0"]
-}

@@ -35,16 +35,16 @@ def create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_data, id, th
     ax.set_xlabel("#data")
     ax.set_ylabel("Accuracy")
     names_dict = {
-        0: "Machines avec 2 états",
-        1: "Machines avec 3 états",
-        2: "Machines avec 4 états",
-        3: "Machines avec 5 états",
-        4: "Machines avec 6 états",
-        5: "Machines avec 7 états",
-        6: "Machines avec 8 états",
-        7: "Machines avec 9 états",
-        8: "Machines avec 10 états",
-        9: "Machines avec 11 états"
+        0: "Machine with 2 states",
+        1: "Machine with 3 states",
+        2: "Machine with 4 states",
+        3: "Machine with 5 states",
+        4: "Machine with 6 states",
+        5: "Machine with 7 states",
+        6: "Machine with 8 states",
+        7: "Machine with 9 states",
+        8: "Machine with 10 states",
+        9: "Machine with 11 states"
     }
     if (epoch == "best"):
         # Do not mention epoch in the title
@@ -56,10 +56,10 @@ def create_plot(init_train_acc, init_dev_acc, train_acc, dev_acc, n_data, id, th
     ax.legend()
 
     day = date.today()
-    if not os.path.exists("./images_b4_ICML"):
-        os.makedirs("./images_b4_ICML")
-    os.makedirs(f"./images_b4_ICML/{day}",exist_ok=True)
-    plotname = f"./images_b4_ICML/{day}/acc-{id}-{str(threshold)}-{epoch}-{eval}.png"
+    if not os.path.exists("./Accuracy Evolution plots"):
+        os.makedirs("./Accuracy Evolution plots")
+    os.makedirs(f"./Accuracy Evolution plots/{day}",exist_ok=True)
+    plotname = f"./Accuracy Evolution plots/{day}/acc-{id}-{str(threshold)}-{epoch}-{eval}.png"
     print(f"Saved {plotname}")
     plt.savefig(plotname)
     # plt.show()
