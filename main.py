@@ -39,16 +39,29 @@ def threshold_study():
 if __name__ == "__main__":
     args = parse_args()
 
+    os.system(f'python fsm_initialization.py --id={0}')
+    os.system(f'python train_rnn.py --id={0}')
+    os.system(f'python extract_mealy.py --id={0}')
+
+    # Experiment multiples times on the same dataset
+
     # n_machines = args.n_machines
     # for j in range(1):
     #     for i in range(n_machines):
     #         os.system(f'python fsm_initialization.py --id={i} --n_states={i+2}')
     #         os.system(f'python train_rnn.py --id={i} --times={j+1}')
     #         os.system(f'python extract_mealy.py --id={i} --times={j+1}')
-    for i in range(10):
-        os.system(f'python fsm_initialization.py --id={i}')
-        os.system(f'python train_rnn.py --id={i}')
-        os.system(f'python extract_mealy.py --id={i}')
+
+
+    # Experiment one time
+
+    # for i in range(10):
+    #     os.system(f'python fsm_initialization.py --id={i}')
+    #     os.system(f'python train_rnn.py --id={i}')
+    #     os.system(f'python extract_mealy.py --id={i}')
+
+
+    #Experiment multiple times on different datasets
 
     # for i in range(10):
     #     os.system(f'python fsm_initialization.py --id={i} --static=0')

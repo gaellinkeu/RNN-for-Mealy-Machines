@@ -29,9 +29,9 @@ We faced many challenges when trying to address this extraction problem
 
 ## Run
 
-To run this project, you have to first make sure you have all the packages listed in the __requirements.txt__ file. and then execute the __exec.py__ by running __
+To run this project, you have to first make sure you have all the packages listed in the __requirements.txt__ file. and then execute the __main.py__ by running __
 ```bash
-python exec.py
+python main.py
 ```
 
 ## Notes
